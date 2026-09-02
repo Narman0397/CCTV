@@ -1,0 +1,15 @@
+C2 — ONNX Runtime failure baseline attempt
+===========================================
+Timestamp (Asia/Makassar): 2026-09-03T03:16:35+08:00
+Release: /tmp/cctv-v1.0.2-extracted-20260903/cctv-ai-server-1.0.2-linux-x86_64
+Required matrix: missing ORT, incompatible ORT, unloadable ORT, invalid model, model validate, service startup and recording continuity.
+
+Attempted command: /tmp/cctv-v1.0.2-extracted-20260903/cctv-ai-server-1.0.2-linux-x86_64/bin/cctv-server model validate --help
+Return code: 1
+/tmp/cctv-v1.0.2-extracted-20260903/cctv-ai-server-1.0.2-linux-x86_64/bin/cctv-server: /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.39' not found (required by /tmp/cctv-v1.0.2-extracted-20260903/cctv-ai-server-1.0.2-linux-x86_64/bin/cctv-server)
+
+Attempted command: /tmp/cctv-v1.0.2-extracted-20260903/cctv-ai-server-1.0.2-linux-x86_64/bin/cctv-server model validate --config /nonexistent --model /nonexistent
+Return code: 1
+/tmp/cctv-v1.0.2-extracted-20260903/cctv-ai-server-1.0.2-linux-x86_64/bin/cctv-server: /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.39' not found (required by /tmp/cctv-v1.0.2-extracted-20260903/cctv-ai-server-1.0.2-linux-x86_64/bin/cctv-server)
+
+Result: BLOCKED — dynamic loader fails before application/ORT code runs. This is not evidence that the ORT failure path is safe.

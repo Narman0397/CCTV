@@ -1,0 +1,34 @@
+D1 — GLIBC compatibility baseline
+=================================
+Timestamp (Asia/Makassar): 2026-09-03T03:16:35+08:00
+Target documentation: Ubuntu 22.04/24.04 x86_64
+Audit host: Debian GNU/Linux 12 (bookworm); ldd (Debian GLIBC 2.36-9+deb12u14) 2.36
+
+Command: readelf -V /tmp/cctv-v1.0.2-extracted-20260903/cctv-ai-server-1.0.2-linux-x86_64/bin/cctv-server | grep -o 'GLIBC_[0-9.]*' | sort -Vu
+GLIBC_2.2.5
+GLIBC_2.3
+GLIBC_2.3.2
+GLIBC_2.3.4
+GLIBC_2.7
+GLIBC_2.9
+GLIBC_2.10
+GLIBC_2.14
+GLIBC_2.15
+GLIBC_2.16
+GLIBC_2.17
+GLIBC_2.18
+GLIBC_2.25
+GLIBC_2.28
+GLIBC_2.29
+GLIBC_2.30
+GLIBC_2.32
+GLIBC_2.33
+GLIBC_2.34
+GLIBC_2.39
+Highest required symbol: GLIBC_2.39
+
+Command: /tmp/cctv-v1.0.2-extracted-20260903/cctv-ai-server-1.0.2-linux-x86_64/bin/cctv-server --help
+Return code: 1
+/tmp/cctv-v1.0.2-extracted-20260903/cctv-ai-server-1.0.2-linux-x86_64/bin/cctv-server: /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.39' not found (required by /tmp/cctv-v1.0.2-extracted-20260903/cctv-ai-server-1.0.2-linux-x86_64/bin/cctv-server)
+
+Result: FAIL — binary requires GLIBC_2.39 and cannot load against host GLIBC 2.36. D1 remains OPEN.

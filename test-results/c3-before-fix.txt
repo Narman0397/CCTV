@@ -1,0 +1,13 @@
+C3 — camera ID persistence baseline attempt
+============================================
+Timestamp (Asia/Makassar): 2026-09-03T03:16:35+08:00
+Required matrix: create/restart/create, concurrent creation, delete/create, upgrade, rollback and migration.
+
+Available database/source inventory:
+Database/source result: none shipped
+
+Attempted application startup command: /tmp/cctv-v1.0.2-extracted-20260903/cctv-ai-server-1.0.2-linux-x86_64/bin/cctv-server serve --config /tmp/cctv-v1.0.2-extracted-20260903/cctv-ai-server-1.0.2-linux-x86_64/config/config.example.toml
+Return code: 1
+/tmp/cctv-v1.0.2-extracted-20260903/cctv-ai-server-1.0.2-linux-x86_64/bin/cctv-server: /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.39' not found (required by /tmp/cctv-v1.0.2-extracted-20260903/cctv-ai-server-1.0.2-linux-x86_64/bin/cctv-server)
+
+Result: BLOCKED — API cannot start on this host; no camera ID behavior is being inferred from documentation.

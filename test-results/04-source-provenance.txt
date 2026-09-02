@@ -1,0 +1,123 @@
+CCTV v1.0.2 source availability / provenance investigation
+=======================================================
+Timestamp (Asia/Makassar): 2026-09-03T03:16:20+08:00
+
+Git remote
+origin	https://github.com/Narman0397/CCTV.git (fetch)
+origin	https://github.com/Narman0397/CCTV.git (push)
+
+Branches
+* arena/01a06385-cctv
+  main
+  remotes/origin/HEAD -> origin/main
+  remotes/origin/main
+
+Tags
+
+All reachable commits
+55166a3 (HEAD -> arena/01a06385-cctv) chore: establish extracted v1.0.2 baseline
+ test-results/00-baseline-zip.txt     |  51 ++++++++++
+ test-results/01-zip-extraction.txt   | 180 +++++++++++++++++++++++++++++++++++
+ test-results/02-source-inventory.txt |  64 +++++++++++++
+ test-results/03-branch-baseline.txt  |  20 ++++
+ 4 files changed, 315 insertions(+)
+3915ad7 docs: record v1.0.2 remediation blocker baseline
+ docs/DEFECT-LOG-v1.0.3.md           |  99 ++++++++++++++++++++++++++++++++++
+ test-results/00-baseline-v1.0.2.txt | 102 ++++++++++++++++++++++++++++++++++++
+ 2 files changed, 201 insertions(+)
+6dd2c66 (grafted, origin/main, origin/HEAD, main) Add files via upload
+ cctv-ai-server-1.0.2-linux-x86_64.zip | Bin 0 -> 3564774 bytes
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
+Git object inventory
+
+GitHub recursive tree
+blob	cctv-ai-server-1.0.2-linux-x86_64.zip	3564774
+
+Extracted release manifest provenance
+{
+  "application": "cctv-server",
+  "name": "cctv-ai-server",
+  "version": "1.0.2",
+  "build_timestamp": "2026-09-02T06:56:50Z",
+  "git_commit": "unknown",
+  "target_os": "linux",
+  "target_arch": "x86_64",
+  "target_triple": "x86_64-unknown-linux-gnu",
+  "binary_name": "cctv-server",
+  "build_profile": "release",
+  "rustc": "rustc 1.98.0 (88d9e12ae 2026-08-18)",
+  "cargo": "cargo 1.98.0 (797e8a9bc 2026-08-05)",
+  "dependency_lock": "Cargo.lock (workspace, sha256 below)",
+  "release_type": "production",
+  "files": [
+    {
+      "path": "bin/cctv-server",
+      "sha256": "83bce8b3013ee2015a75f5e930d8d7337165bf54ddc6f614f2afd6c039f6c298"
+    },
+    {
+      "path": "web/index.html",
+      "sha256": "c2116dae3341bf1a9b98cb0d729b6a49b3513c8fe11c9ad1c1500f2b39d92476"
+    },
+    {
+      "path": "config/config.example.toml",
+      "sha256": "c2caa1857711b778e0dd183e1bb5276ff292d88149d2af0d8cb52806ec2e56e2"
+    },
+    {
+      "path": "models/README.md",
+      "sha256": "448acf8234b327caa485b8c93d5a3e7c4dab013d93ee7b623f8b6a38662249e9"
+    },
+    {
+      "path": "systemd/cctv-server.service",
+      "sha256": "4acb860531ef5fd2630d00e5c99ef0ab4d21a840fe5cf9a77136ec82f745d5da"
+    },
+    {
+      "path": "scripts/install.sh",
+      "sha256": "2a2ebdc9b4907a634b62a9faaa0f669927bd3882d35a5762520fef71fb4f279e"
+    },
+    {
+      "path": "scripts/upgrade.sh",
+      "sha256": "1df7f9ca81f5c97472daf0f614350ff6d81aae25b09eacb50e838251210e36d5"
+    },
+    {
+      "path": "scripts/uninstall.sh",
+      "sha256": "ee30e4a6f55f37eb9246f3104f148d9f64260e72d794f5916c5d29f7f0134f85"
+    },
+    {
+      "path": "VERSION",
+      "sha256": "9fd28642d3aca191e5c7fc2383cfd6fabb2aac8743f029dabb8989ac584e31bc"
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "bd89d439e44948c6ca32fad3f1a38153ba0b333a6c0d9fd198a8826dbffd1efb"
+    },
+    {
+      "path": "README.md",
+      "sha256": "5d6262dfbb7409ba17161f1ab6af6283f486541aaedce622d96e7bffe7f3fc24"
+    },
+    {
+      "path": "docs/ARCHITECTURE.md",
+      "sha256": "50f130135350c5f8363e0a21028e75eb59e917ecd9e23a77d0c2bd1548190453"
+    },
+    {
+      "path": "docs/AUDIT-v1.0.2.md",
+      "sha256": "dc5aa7d727ccdfa8a71f6b006b82c8c5fb7df43a9474d9a1565db55023b8d459"
+    },
+    {
+      "path": "docs/BENCHMARKS.md",
+      "sha256": "6e3e5f74fa78d49f9e9a40d6dd888abb64a8ffc99775597788da2274b84dfcb6"
+    },
+    {
+      "path": "docs/CONFIGURATION.md",
+      "sha256": "f9862bcf7dbcdbba605c4a3ce653ee6ba54b80056c651ad87c66c1946f3be9b1"
+    },
+    {
+      "path": "docs/INSTALL.md",
+      "sha256": "c4891b5b61e6ef9277489430c1965bbecd4c554537411a91b5ea2421b315ea7d"
+    },
+
+Manifest git_commit field
+6:  "git_commit": "unknown",
+
+Source provenance result: PARTIAL / SOURCE BLOCKER TRUE
+No source workspace, exact source commit, Cargo manifest, Cargo.lock, tests, fixtures or build inputs can be proven from available material.

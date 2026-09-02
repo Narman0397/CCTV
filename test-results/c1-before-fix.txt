@@ -1,0 +1,14 @@
+C1 — AI tensor layout baseline attempt
+=========================================
+Timestamp (Asia/Makassar): 2026-09-03T03:16:35+08:00
+Release: /tmp/cctv-v1.0.2-extracted-20260903/cctv-ai-server-1.0.2-linux-x86_64
+Expected evidence: same model + same known-good human frame; application HWC-as-NCHW produces 0, correct NCHW produces valid person detections.
+
+Available fixture/model inventory:
+Model/frame result: none shipped
+
+Attempted command: /tmp/cctv-v1.0.2-extracted-20260903/cctv-ai-server-1.0.2-linux-x86_64/bin/cctv-server benchmark
+Return code: 1
+/tmp/cctv-v1.0.2-extracted-20260903/cctv-ai-server-1.0.2-linux-x86_64/bin/cctv-server: /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.39' not found (required by /tmp/cctv-v1.0.2-extracted-20260903/cctv-ai-server-1.0.2-linux-x86_64/bin/cctv-server)
+
+Result: BLOCKED — binary cannot start on this host; source, model and known-good frame are absent. No detection result is treated as PASS or FAIL.
