@@ -1,0 +1,51 @@
+CCTV AI/NVR v1.0.2 immutable ZIP baseline
+===========================================
+Timestamp (Asia/Makassar): 2026-09-03T03:15:42+08:00
+Repository: /home/user/CCTV
+Branch: arena/01a06385-cctv
+Commit at phase start: 3915ad7faaf8fc839ac053d1b9296fa4db784ccf
+
+ZIP: /home/user/CCTV/cctv-ai-server-1.0.2-linux-x86_64.zip
+Expected SHA256: bee2b763f9bd01d487d51db4261b0d24b636885f82990814912aacff7ab99cbe
+Actual SHA256: bee2b763f9bd01d487d51db4261b0d24b636885f82990814912aacff7ab99cbe  /home/user/CCTV/cctv-ai-server-1.0.2-linux-x86_64.zip
+sha256sum return code: 0
+Hash result: PASS
+
+Command: unzip -t /home/user/CCTV/cctv-ai-server-1.0.2-linux-x86_64.zip
+Return code: 0
+Archive:  /home/user/CCTV/cctv-ai-server-1.0.2-linux-x86_64.zip
+    testing: cctv-ai-server-1.0.2-linux-x86_64/   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/bin/   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/bin/cctv-server   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/web/   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/web/index.html   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/models/   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/models/README.md   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/scripts/   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/scripts/install.sh   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/scripts/upgrade.sh   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/scripts/uninstall.sh   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/systemd/   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/systemd/cctv-server.service   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/docs/   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/docs/ARCHITECTURE.md   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/docs/AUDIT-v1.0.2.md   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/docs/BENCHMARKS.md   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/docs/CONFIGURATION.md   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/docs/INSTALL.md   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/docs/OPERATIONS.md   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/docs/PERFORMANCE.md   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/docs/RELEASE-REPORT-v1.0.2.md   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/docs/SECURITY.md   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/docs/TESTING.md   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/docs/TROUBLESHOOTING.md   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/docs/VERIFICATION-v1.0.2.md   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/config/   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/config/config.example.toml   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/README.md   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/VERSION   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/LICENSE   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/RELEASE-MANIFEST.json   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/SHA256SUMS   OK
+No errors detected in compressed data of /home/user/CCTV/cctv-ai-server-1.0.2-linux-x86_64.zip.
+Archive test result: PASS

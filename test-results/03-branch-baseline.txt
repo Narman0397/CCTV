@@ -1,0 +1,20 @@
+CCTV v1.0.2 extracted baseline / branch evidence
+===============================================
+Timestamp (Asia/Makassar): 2026-09-03T03:16:09+08:00
+Requested branch name: fix/v1.0.3-production-remediation
+Actual branch: arena/01a06385-cctv
+Branch policy result: NOT CREATED — this Arena session is fixed to arena/01a06385-cctv; no branch switch or additional branch is permitted.
+
+Command: git status --short --branch
+## arena/01a06385-cctv
+?? test-results/00-baseline-zip.txt
+?? test-results/01-zip-extraction.txt
+?? test-results/02-source-inventory.txt
+?? test-results/03-branch-baseline.txt
+Command: git log -1 --oneline
+3915ad7 docs: record v1.0.2 remediation blocker baseline
+Command: git branch --show-current
+arena/01a06385-cctv
+
+No source remediation has been performed. The only additions at this baseline stage are audit/evidence files.
+Baseline commit will be made on the fixed session branch, without creating a dummy branch.

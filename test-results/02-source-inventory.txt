@@ -1,0 +1,64 @@
+CCTV source inventory after mandatory extraction
+===============================================
+Timestamp (Asia/Makassar): 2026-09-03T03:15:59+08:00
+Extracted root: /tmp/cctv-v1.0.2-extracted-20260903/cctv-ai-server-1.0.2-linux-x86_64
+
+Command: find extracted root for Cargo/source/model/config artifacts
+Expected: Cargo.toml, Cargo.lock, Rust source, tests/fixtures, migrations, or source build files if shipped
+Actual:
+/tmp/cctv-v1.0.2-extracted-20260903/cctv-ai-server-1.0.2-linux-x86_64/config/config.example.toml
+Return code: 0
+
+Command: find full extracted tree (max depth 4)
+/tmp/cctv-v1.0.2-extracted-20260903/cctv-ai-server-1.0.2-linux-x86_64/LICENSE
+/tmp/cctv-v1.0.2-extracted-20260903/cctv-ai-server-1.0.2-linux-x86_64/README.md
+/tmp/cctv-v1.0.2-extracted-20260903/cctv-ai-server-1.0.2-linux-x86_64/RELEASE-MANIFEST.json
+/tmp/cctv-v1.0.2-extracted-20260903/cctv-ai-server-1.0.2-linux-x86_64/SHA256SUMS
+/tmp/cctv-v1.0.2-extracted-20260903/cctv-ai-server-1.0.2-linux-x86_64/VERSION
+/tmp/cctv-v1.0.2-extracted-20260903/cctv-ai-server-1.0.2-linux-x86_64/bin/cctv-server
+/tmp/cctv-v1.0.2-extracted-20260903/cctv-ai-server-1.0.2-linux-x86_64/config/config.example.toml
+/tmp/cctv-v1.0.2-extracted-20260903/cctv-ai-server-1.0.2-linux-x86_64/docs/ARCHITECTURE.md
+/tmp/cctv-v1.0.2-extracted-20260903/cctv-ai-server-1.0.2-linux-x86_64/docs/AUDIT-v1.0.2.md
+/tmp/cctv-v1.0.2-extracted-20260903/cctv-ai-server-1.0.2-linux-x86_64/docs/BENCHMARKS.md
+/tmp/cctv-v1.0.2-extracted-20260903/cctv-ai-server-1.0.2-linux-x86_64/docs/CONFIGURATION.md
+/tmp/cctv-v1.0.2-extracted-20260903/cctv-ai-server-1.0.2-linux-x86_64/docs/INSTALL.md
+/tmp/cctv-v1.0.2-extracted-20260903/cctv-ai-server-1.0.2-linux-x86_64/docs/OPERATIONS.md
+/tmp/cctv-v1.0.2-extracted-20260903/cctv-ai-server-1.0.2-linux-x86_64/docs/PERFORMANCE.md
+/tmp/cctv-v1.0.2-extracted-20260903/cctv-ai-server-1.0.2-linux-x86_64/docs/RELEASE-REPORT-v1.0.2.md
+/tmp/cctv-v1.0.2-extracted-20260903/cctv-ai-server-1.0.2-linux-x86_64/docs/SECURITY.md
+/tmp/cctv-v1.0.2-extracted-20260903/cctv-ai-server-1.0.2-linux-x86_64/docs/TESTING.md
+/tmp/cctv-v1.0.2-extracted-20260903/cctv-ai-server-1.0.2-linux-x86_64/docs/TROUBLESHOOTING.md
+/tmp/cctv-v1.0.2-extracted-20260903/cctv-ai-server-1.0.2-linux-x86_64/docs/VERIFICATION-v1.0.2.md
+/tmp/cctv-v1.0.2-extracted-20260903/cctv-ai-server-1.0.2-linux-x86_64/models/README.md
+/tmp/cctv-v1.0.2-extracted-20260903/cctv-ai-server-1.0.2-linux-x86_64/scripts/install.sh
+/tmp/cctv-v1.0.2-extracted-20260903/cctv-ai-server-1.0.2-linux-x86_64/scripts/uninstall.sh
+/tmp/cctv-v1.0.2-extracted-20260903/cctv-ai-server-1.0.2-linux-x86_64/scripts/upgrade.sh
+/tmp/cctv-v1.0.2-extracted-20260903/cctv-ai-server-1.0.2-linux-x86_64/systemd/cctv-server.service
+/tmp/cctv-v1.0.2-extracted-20260903/cctv-ai-server-1.0.2-linux-x86_64/web/index.html
+
+Command: source-like file count
+Cargo.toml: 0
+Cargo.lock: 0
+Rust files: 0
+ONNX files: 0
+build.rs: 0
+tests directories: 0
+fixtures directories: 0
+migrations directories: 0
+
+Workspace/repository inventory
+Command: find /home/user/CCTV -maxdepth 5 -type f (excluding .git)
+/home/user/CCTV/cctv-ai-server-1.0.2-linux-x86_64.zip
+/home/user/CCTV/docs/DEFECT-LOG-v1.0.3.md
+/home/user/CCTV/test-results/00-baseline-v1.0.2.txt
+/home/user/CCTV/test-results/00-baseline-zip.txt
+/home/user/CCTV/test-results/01-zip-extraction.txt
+/home/user/CCTV/test-results/02-source-inventory.txt
+
+Command: find /home/user for source candidates (excluding .git and extracted temp)
+
+Command: GitHub repository contents
+blob	cctv-ai-server-1.0.2-linux-x86_64.zip	3564774
+GitHub API return code: 0
+
+Inventory result: SOURCE ABSENT from extracted ZIP, repository, and searched workspace
