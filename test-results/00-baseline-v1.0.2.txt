@@ -1,0 +1,102 @@
+CCTV AI/NVR remediation baseline
+================================
+
+Timestamp (local): 2026-09-03T03:11:32+08:00 (recorded during initial audit)
+Repository: Narman0397/CCTV
+Branch: arena/01a06385-cctv
+Baseline commit: 6dd2c66a6969d62b022c9694b7df7c2975cf8ace
+
+IMMUTABILITY
+------------
+The v1.0.2 ZIP was not modified. It remains the only tracked product artifact.
+The baseline hash supplied by the request and independently recomputed are:
+
+bee2b763f9bd01d487d51db4261b0d24b636885f82990814912aacff7ab99cbe  cctv-ai-server-1.0.2-linux-x86_64.zip
+
+Command:
+  sha256sum cctv-ai-server-1.0.2-linux-x86_64.zip
+Expected:
+  hash exactly equals bee2b763f9bd01d487d51db4261b0d24b636885f82990814912aacff7ab99cbe
+Actual:
+  hash exactly equals bee2b763f9bd01d487d51db4261b0d24b636885f82990814912aacff7ab99cbe
+Return code: 0
+Result: PASS
+
+ARCHIVE STRUCTURE
+-----------------
+Command:
+  unzip -l cctv-ai-server-1.0.2-linux-x86_64.zip
+Expected:
+  self-contained release archive with binary, web, configuration, scripts,
+  systemd unit, documentation, manifest, VERSION and checksums
+Actual:
+  33 entries; 22 files; binary, web/index.html, config/config.example.toml,
+  models/README.md, install/upgrade/uninstall scripts, systemd unit, 13 docs,
+  README.md, VERSION=1.0.2, LICENSE, RELEASE-MANIFEST.json and SHA256SUMS
+Return code: 0
+Result: PASS
+
+Command:
+  unzip -t cctv-ai-server-1.0.2-linux-x86_64.zip
+Expected: no archive errors
+Actual: No errors detected in compressed data
+Return code: 0
+Result: PASS
+
+INNER CHECKSUMS
+---------------
+Command:
+  unzip to an isolated temporary directory; cd release root; sha256sum -c SHA256SUMS
+Expected: 22/22 entries OK; zero mismatches
+Actual: LICENSE, README.md, RELEASE-MANIFEST.json, VERSION, binary, config,
+        all docs, models README, all scripts, systemd unit and web dashboard: OK
+Return code: 0
+Result: PASS
+
+SOURCE AVAILABILITY
+-------------------
+Commands:
+  git ls-files
+  gh api repos/Narman0397/CCTV/contents --jq '.[].name'
+  gh api repos/Narman0397/CCTV/git/trees/main?recursive=1
+Expected: Rust source/workspace available for audit and remediation
+Actual:
+  tracked files: cctv-ai-server-1.0.2-linux-x86_64.zip only
+  GitHub root: cctv-ai-server-1.0.2-linux-x86_64.zip only
+  no src/, crates/, Cargo.toml or Cargo.lock in the connected repository
+Result: BLOCKED
+
+BASELINE BINARY EXECUTION
+-------------------------
+Environment:
+  OS: Debian GNU/Linux 12 (bookworm)
+  libc: Debian GLIBC 2.36-9+deb12u14
+  kernel: 6.1.158+ x86_64
+
+Command:
+  unzip -p cctv-ai-server-1.0.2-linux-x86_64.zip '*/bin/cctv-server' >/tmp/cctv-server-baseline
+  chmod +x /tmp/cctv-server-baseline
+  /tmp/cctv-server-baseline --help
+Expected: CLI starts and prints help
+Actual stderr:
+  /tmp/cctv-server-baseline: /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.39' not found (required by /tmp/cctv-server-baseline)
+Return code: 1
+Result: FAIL (baseline cannot execute on this audit host)
+
+Static ELF inspection:
+  required highest GLIBC symbol: GLIBC_2.39
+  required libc: libc.so.6
+  target documented by package: Ubuntu 22.04 / 24.04 x86_64
+
+This prevents honest execution of model validate, camera lifecycle, API,
+installer readiness, upgrade, rollback, systemd, UI and real-user tests in
+this environment. No developer workaround or manually replaced library was
+used.
+
+BASELINE STATUS
+---------------
+PASS: ZIP hash unchanged; ZIP structure valid; internal checksums 22/22 OK.
+FAIL: release binary cannot execute on this host because it requires GLIBC_2.39.
+BLOCKED: source audit/remediation and all runtime/clean-host validation because
+         the connected repository contains no source and this environment is
+         not a clean Ubuntu 22.04/24.04 host.
