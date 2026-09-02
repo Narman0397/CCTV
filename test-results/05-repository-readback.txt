@@ -1,0 +1,115 @@
+CCTV repository full readback
+============================
+Timestamp (Asia/Makassar): 2026-09-03T03:28:27+08:00
+Repository: /home/user/CCTV
+Branch: arena/01a06385-cctv
+HEAD: e8741f6216946932b3db512a8a7568e24cf18a96
+
+Repository files (excluding .git):
+./README.md
+./cctv-ai-server-1.0.2-linux-x86_64.zip
+./docs/DEFECT-LOG-v1.0.3.md
+./docs/REPOSITORY-STRUCTURE.md
+./test-results/00-baseline-v1.0.2.txt
+./test-results/00-baseline-zip.txt
+./test-results/01-zip-extraction.txt
+./test-results/02-source-inventory.txt
+./test-results/03-branch-baseline.txt
+./test-results/04-source-provenance.txt
+./test-results/05-repository-readback.txt
+./test-results/c1-before-fix.txt
+./test-results/c2-before-fix.txt
+./test-results/c3-before-fix.txt
+./test-results/d1-before-fix.txt
+
+Tracked file hashes and sizes:
+cctv-ai-server-1.0.2-linux-x86_64.zip	size=3564774 mode=644 sha256=bee2b763f9bd01d487d51db4261b0d24b636885f82990814912aacff7ab99cbe cctv-ai-server-1.0.2-linux-x86_64.zip
+docs/DEFECT-LOG-v1.0.3.md	size=8174 mode=644 sha256=a59fb69d4d408c7cf1344e286f38495c1feeba7e77982f6753044e639a3be12e docs/DEFECT-LOG-v1.0.3.md
+test-results/00-baseline-v1.0.2.txt	size=3692 mode=644 sha256=b84193e3a97ada6b3f321a32c02de59f838e4cf8f1696517be179ce8e191a02a test-results/00-baseline-v1.0.2.txt
+test-results/00-baseline-zip.txt	size=3094 mode=644 sha256=5a0c7e6af229a9fa0861221c38ca96a464196453887326829248ff984efd0c2b test-results/00-baseline-zip.txt
+test-results/01-zip-extraction.txt	size=7225 mode=644 sha256=d50fb042ed04720407becceb71ed00df68c95a8f41c33da13eb9ea0507cb8fe4 test-results/01-zip-extraction.txt
+test-results/02-source-inventory.txt	size=3665 mode=644 sha256=6d145023dab9affd6ecbe1573b826cfd44be6c100454771db99b57d3f2c6a656 test-results/02-source-inventory.txt
+test-results/03-branch-baseline.txt	size=942 mode=644 sha256=6d96ec36aaa34017050a44a4db4b73db7e5c146174e56bb0ef3a4c6f6a2dca0e test-results/03-branch-baseline.txt
+test-results/04-source-provenance.txt	size=4214 mode=644 sha256=e04b9682ec25f6125ba39fd1e8810f3845dc651d9f9b49b6f258bf4fef0778ff test-results/04-source-provenance.txt
+test-results/c1-before-fix.txt	size=960 mode=644 sha256=013139983bccba7953a8441846c123561353835ce9542f69242dc9d39268b40e test-results/c1-before-fix.txt
+test-results/c2-before-fix.txt	size=1314 mode=644 sha256=fcf2f9b094a3e8e7204ba7cec7430b3ee806e05b295cbb76a784f265abbde93d test-results/c2-before-fix.txt
+test-results/c3-before-fix.txt	size=944 mode=644 sha256=34a49ec76577b9cb718e4b7177d14c5ee37a967190f478e66553e646adb6cfa7 test-results/c3-before-fix.txt
+test-results/d1-before-fix.txt	size=1127 mode=644 sha256=d38f806bcb038c43845cf7b68c5928ab8695a6c7f41fd48b2e3972634e60bbf8 test-results/d1-before-fix.txt
+
+Text readback performed:
+READ OK: docs/DEFECT-LOG-v1.0.3.md (8174 bytes)
+READ OK: docs/REPOSITORY-STRUCTURE.md (5021 bytes)
+READ OK: test-results/00-baseline-v1.0.2.txt (3692 bytes)
+READ OK: test-results/00-baseline-zip.txt (3094 bytes)
+READ OK: test-results/01-zip-extraction.txt (7225 bytes)
+READ OK: test-results/02-source-inventory.txt (3665 bytes)
+READ OK: test-results/03-branch-baseline.txt (942 bytes)
+READ OK: test-results/04-source-provenance.txt (4214 bytes)
+READ OK: test-results/05-repository-readback.txt (3164 bytes)
+READ OK: test-results/c1-before-fix.txt (960 bytes)
+READ OK: test-results/c2-before-fix.txt (1314 bytes)
+READ OK: test-results/c3-before-fix.txt (944 bytes)
+READ OK: test-results/d1-before-fix.txt (1127 bytes)
+
+ZIP readback performed:
+Archive:  cctv-ai-server-1.0.2-linux-x86_64.zip
+    testing: cctv-ai-server-1.0.2-linux-x86_64/   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/bin/   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/bin/cctv-server   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/web/   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/web/index.html   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/models/   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/models/README.md   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/scripts/   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/scripts/install.sh   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/scripts/upgrade.sh   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/scripts/uninstall.sh   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/systemd/   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/systemd/cctv-server.service   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/docs/   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/docs/ARCHITECTURE.md   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/docs/AUDIT-v1.0.2.md   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/docs/BENCHMARKS.md   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/docs/CONFIGURATION.md   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/docs/INSTALL.md   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/docs/OPERATIONS.md   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/docs/PERFORMANCE.md   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/docs/RELEASE-REPORT-v1.0.2.md   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/docs/SECURITY.md   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/docs/TESTING.md   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/docs/TROUBLESHOOTING.md   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/docs/VERIFICATION-v1.0.2.md   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/config/   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/config/config.example.toml   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/README.md   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/VERSION   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/LICENSE   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/RELEASE-MANIFEST.json   OK
+    testing: cctv-ai-server-1.0.2-linux-x86_64/SHA256SUMS   OK
+No errors detected in compressed data of cctv-ai-server-1.0.2-linux-x86_64.zip.
+ZIP readback result: PASS
+
+Binary content readback: SHA-256 and ELF metadata inspected without modifying the binary.
+83bce8b3013ee2015a75f5e930d8d7337165bf54ddc6f614f2afd6c039f6c298  -
+ELF Header:
+  Magic:   7f 45 4c 46 02 01 01 00 00 00 00 00 00 00 00 00
+  Class:                             ELF64
+  Data:                              2's complement, little endian
+  Version:                           1 (current)
+  OS/ABI:                            UNIX - System V
+  ABI Version:                       0
+  Type:                              DYN (Position-Independent Executable file)
+  Machine:                           Advanced Micro Devices X86-64
+  Version:                           0x1
+  Entry point address:               0x1ef440
+  Start of program headers:          64 (bytes into file)
+  Start of section headers:          8301088 (bytes into file)
+  Flags:                             0x0
+  Size of this header:               64 (bytes)
+  Size of program headers:           56 (bytes)
+  Number of program headers:         12
+  Size of section headers:           64 (bytes)
+  Number of section headers:         33
+  Section header string table index: 32
+
+Readback result: PASS for all repository text files and ZIP contents; binary is an opaque release artifact.
