@@ -1,0 +1,111 @@
+{
+  "application": "cctv-server",
+  "name": "cctv-ai-server",
+  "version": "1.0.2",
+  "build_timestamp": "2026-09-02T06:56:50Z",
+  "git_commit": "unknown",
+  "target_os": "linux",
+  "target_arch": "x86_64",
+  "target_triple": "x86_64-unknown-linux-gnu",
+  "binary_name": "cctv-server",
+  "build_profile": "release",
+  "rustc": "rustc 1.98.0 (88d9e12ae 2026-08-18)",
+  "cargo": "cargo 1.98.0 (797e8a9bc 2026-08-05)",
+  "dependency_lock": "Cargo.lock (workspace, sha256 below)",
+  "release_type": "production",
+  "files": [
+    {
+      "path": "bin/cctv-server",
+      "sha256": "83bce8b3013ee2015a75f5e930d8d7337165bf54ddc6f614f2afd6c039f6c298"
+    },
+    {
+      "path": "web/index.html",
+      "sha256": "c2116dae3341bf1a9b98cb0d729b6a49b3513c8fe11c9ad1c1500f2b39d92476"
+    },
+    {
+      "path": "config/config.example.toml",
+      "sha256": "c2caa1857711b778e0dd183e1bb5276ff292d88149d2af0d8cb52806ec2e56e2"
+    },
+    {
+      "path": "models/README.md",
+      "sha256": "448acf8234b327caa485b8c93d5a3e7c4dab013d93ee7b623f8b6a38662249e9"
+    },
+    {
+      "path": "systemd/cctv-server.service",
+      "sha256": "4acb860531ef5fd2630d00e5c99ef0ab4d21a840fe5cf9a77136ec82f745d5da"
+    },
+    {
+      "path": "scripts/install.sh",
+      "sha256": "2a2ebdc9b4907a634b62a9faaa0f669927bd3882d35a5762520fef71fb4f279e"
+    },
+    {
+      "path": "scripts/upgrade.sh",
+      "sha256": "1df7f9ca81f5c97472daf0f614350ff6d81aae25b09eacb50e838251210e36d5"
+    },
+    {
+      "path": "scripts/uninstall.sh",
+      "sha256": "ee30e4a6f55f37eb9246f3104f148d9f64260e72d794f5916c5d29f7f0134f85"
+    },
+    {
+      "path": "VERSION",
+      "sha256": "9fd28642d3aca191e5c7fc2383cfd6fabb2aac8743f029dabb8989ac584e31bc"
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "bd89d439e44948c6ca32fad3f1a38153ba0b333a6c0d9fd198a8826dbffd1efb"
+    },
+    {
+      "path": "README.md",
+      "sha256": "5d6262dfbb7409ba17161f1ab6af6283f486541aaedce622d96e7bffe7f3fc24"
+    },
+    {
+      "path": "docs/ARCHITECTURE.md",
+      "sha256": "50f130135350c5f8363e0a21028e75eb59e917ecd9e23a77d0c2bd1548190453"
+    },
+    {
+      "path": "docs/AUDIT-v1.0.2.md",
+      "sha256": "dc5aa7d727ccdfa8a71f6b006b82c8c5fb7df43a9474d9a1565db55023b8d459"
+    },
+    {
+      "path": "docs/BENCHMARKS.md",
+      "sha256": "6e3e5f74fa78d49f9e9a40d6dd888abb64a8ffc99775597788da2274b84dfcb6"
+    },
+    {
+      "path": "docs/CONFIGURATION.md",
+      "sha256": "f9862bcf7dbcdbba605c4a3ce653ee6ba54b80056c651ad87c66c1946f3be9b1"
+    },
+    {
+      "path": "docs/INSTALL.md",
+      "sha256": "c4891b5b61e6ef9277489430c1965bbecd4c554537411a91b5ea2421b315ea7d"
+    },
+    {
+      "path": "docs/OPERATIONS.md",
+      "sha256": "8a52840ea60eab236cdae67d01db1e060da3022badd03ffe28e2dce8749d4848"
+    },
+    {
+      "path": "docs/PERFORMANCE.md",
+      "sha256": "e1917a0607366f1df0c7cec6ccdd331455c61845d0c4d50c1bb0705fc9e95a69"
+    },
+    {
+      "path": "docs/RELEASE-REPORT-v1.0.2.md",
+      "sha256": "e806ed11bbb0b63f8d0b8960d8b40a344aca542c779b1f5c5c5f228543d23f5d"
+    },
+    {
+      "path": "docs/SECURITY.md",
+      "sha256": "def77c470c8aa5dae41a426a710bb0c1b93e4f1e542e1a11bbd52196677fb055"
+    },
+    {
+      "path": "docs/TESTING.md",
+      "sha256": "d098eda7999e09fe5f1d75cd3405e6ae3db4715dad0da1fc70ee0635906f602b"
+    },
+    {
+      "path": "docs/TROUBLESHOOTING.md",
+      "sha256": "ff46da38f7f9e94b0510a3bb3a7f4dcb8f9162ed5f5bcc26590bdbaaf3b08667"
+    },
+    {
+      "path": "docs/VERIFICATION-v1.0.2.md",
+      "sha256": "f2f75debb0ef60a8cb1f267510b6605160b4e0fe1e3ae353d6937dafa19feac6"
+    }
+  ],
+  "cargo_lock_sha256": "af030b7b4da6570a7dac9df4a8289d30ee6bbf81111bd33838c494d82896e8fe"
+}
