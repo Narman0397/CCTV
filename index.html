@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>cctv-server — Video Surveillance Console</title>
+<style>
+:root{
+  --bg:#0b0f14; --bg2:#11161d; --bg3:#171e27; --line:#232c38;
+  --txt:#dbe4ee; --muted:#7f8fa3; --accent:#37d1a8; --accent2:#3aa6ff;
+  --warn:#f5b13d; --err:#ff5d5d; --ok:#37d1a8; --chip:#232c38;
+  --radius:10px; --shadow:0 6px 24px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box; margin:0; padding:0}
+html,body{height:100%}
+body{background:var(--bg); color:var(--txt); font:14px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif; overflow-x:hidden}
+a{color:var(--accent2); text-decoration:none}
+button{font:inherit; cursor:pointer}
+input,select{font:inherit; background:var(--bg2); color:var(--txt); border:1px solid var(--line); border-radius:8px; padding:8px 10px; width:100%}
+input:focus,select:focus{outline:1px solid var(--accent2)}
+.hidden{display:none !important}
+.muted{color:var(--muted)}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:12px}
+
+/* ---------- login ---------- */
+#login{position:fixed; inset:0; z-index:100; display:flex; align-items:center; justify-content:center; background:radial-gradient(1200px 700px at 20% -10%, #12263a 0%, var(--bg) 60%)}
+.login-card{width:340px; background:var(--bg2); border:1px solid var(--line); border-radius:14px; padding:32px 28px; box-shadow:var(--shadow)}
+.login-card h1{font-size:20px; letter-spacing:.5px; margin-bottom:4px}
+.login-card .sub{color:var(--muted); font-size:12.5px; margin-bottom:22px}
+.login-card label{display:block; font-size:12px; color:var(--muted); margin:12px 0 5px}
+.btn{display:inline-flex; align-items:center; gap:7px; border:none; border-radius:8px; padding:9px 14px; background:var(--bg3); color:var(--txt); border:1px solid var(--line)}
+.btn:hover{filter:brightness(1.15)}
+.btn.primary{background:var(--accent); color:#04211a; font-weight:600; border-color:transparent}
+.btn.danger{background:#3a1520; color:var(--err); border-color:#5c2431}
+.btn.small{padding:5px 9px; font-size:12px; border-radius:7px}
+.login-error{color:var(--err); font-size:12.5px; min-height:18px; margin-top:10px}
+
+/* ---------- chrome ---------- */
+#app{display:flex; flex-direction:column; height:100vh}
+header{display:flex; align-items:center; gap:18px; padding:0 18px; height:54px; background:var(--bg2); border-bottom:1px solid var(--line); flex-shrink:0}
+.brand{display:flex; align-items:center; gap:10px; font-weight:700; font-size:15.5px; letter-spacing:.3px}
+.brand .dot{width:10px; height:10px; border-radius:50%; background:var(--accent); box-shadow:0 0 10px var(--accent)}
+nav{display:flex; gap:4px; flex:1}
+nav button{border:none; background:transparent; color:var(--muted); padding:8px 14px; border-radius:8px; font-weight:500}
+nav button.active{background:var(--bg3); color:var(--txt)}
+nav button:hover{color:var(--txt)}
+.hdr-right{display:flex; align-items:center; gap:14px; color:var(--muted); font-size:12.5px}
+.pill{display:inline-flex; align-items:center; gap:6px; background:var(--chip); border:1px solid var(--line); border-radius:999px; padding:3px 10px; font-size:12px; color:var(--muted)}
+.pill .led{width:7px; height:7px; border-radius:50%}
+.led.ok{background:var(--ok); box-shadow:0 0 6px var(--ok)}
+.led.warn{background:var(--warn)}
+.led.err{background:var(--err)}
+
+main{flex:1; overflow-y:auto; padding:20px; scroll-behavior:smooth}
+.tab-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; flex-wrap:wrap; gap:10px}
+.tab-head h2{font-size:17px}
+.toolbar{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
+
+/* ---------- cards / grids ---------- */
+.grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:16px}
+.card{background:var(--bg2); border:1px solid var(--line); border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow)}
+.card .head{display:flex; align-items:center; gap:10px; padding:10px 12px; border-bottom:1px solid var(--line)}
+.card .head .name{font-weight:600; font-size:13.5px}
+.card .head .id{color:var(--muted); font-size:11px}
+.card .head .spacer{flex:1}
+.badge{font-size:10.5px; font-weight:600; padding:2px 8px; border-radius:999px; letter-spacing:.4px}
+.badge.ok{background:#0e2b22; color:var(--ok)}
+.badge.err{background:#3a1520; color:var(--err)}
+.badge.warn{background:#3a2c10; color:var(--warn)}
+.badge.info{background:#10263d; color:var(--accent2)}
+.cam-stage{position:relative; background:#000; aspect-ratio:16/9; min-height:130px}
+.cam-stage img{width:100%; height:100%; object-fit:contain; display:block}
+.cam-stage .ov{position:absolute; left:8px; bottom:8px; display:flex; gap:6px; flex-wrap:wrap}
+.cam-stage .ov .pill{background:rgba(0,0,0,.62); border-color:rgba(255,255,255,.14)}
+.cam-stage .off{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:var(--muted); font-size:13px; background:#07090c}
+.cam-meta{display:grid; grid-template-columns:1fr 1fr; gap:2px 16px; padding:10px 12px; font-size:12px; color:var(--muted)}
+.cam-meta b{color:var(--txt); font-weight:600}
+.cam-actions{display:flex; gap:8px; padding:10px 12px; border-top:1px solid var(--line)}
+
+/* ---------- tables ---------- */
+table{width:100%; border-collapse:collapse; font-size:12.5px}
+th{text-align:left; color:var(--muted); font-weight:600; padding:8px 10px; border-bottom:1px solid var(--line); position:sticky; top:0; background:var(--bg2)}
+td{padding:8px 10px; border-bottom:1px solid #1a222c; vertical-align:middle}
+tr:hover td{background:#141b24}
+.sev{font-size:10.5px; font-weight:700; padding:2px 7px; border-radius:5px}
+.sev.info{background:#10263d; color:var(--accent2)}
+.sev.warning{background:#3a2c10; color:var(--warn)}
+.sev.error{background:#3a1520; color:var(--err)}
+.sev.critical{background:#4a0f18; color:#ff8f8f}
+
+/* ---------- system ---------- */
+.stat-cards{display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:14px; margin-bottom:18px}
+.stat{border:1px solid var(--line); border-radius:var(--radius); background:var(--bg2); padding:14px}
+.stat .k{color:var(--muted); font-size:11.5px; text-transform:uppercase; letter-spacing:.6px}
+.stat .v{font-size:21px; font-weight:700; margin-top:5px}
+.stat .s{color:var(--muted); font-size:11.5px; margin-top:3px}
+.gauge{height:7px; background:var(--chip); border-radius:99px; margin-top:9px; overflow:hidden}
+.gauge i{display:block; height:100%; border-radius:99px; background:linear-gradient(90deg,var(--accent2),var(--accent))}
+.gauge i.warn{background:linear-gradient(90deg,var(--warn),var(--err))}
+.panel{border:1px solid var(--line); border-radius:var(--radius); background:var(--bg2); margin-bottom:16px; overflow:hidden}
+.panel .phead{display:flex; align-items:center; gap:10px; padding:11px 14px; border-bottom:1px solid var(--line); font-weight:600; font-size:13.5px}
+.panel .pbody{padding:12px 14px}
+.kv{display:grid; grid-template-columns:190px 1fr; gap:6px 14px; font-size:12.5px}
+.kv div:nth-child(odd){color:var(--muted)}
+
+/* ---------- modal / toast ---------- */
+#modal{position:fixed; inset:0; background:rgba(5,8,11,.66); display:flex; align-items:center; justify-content:center; z-index:60; backdrop-filter:blur(2px)}
+.modal-card{width:520px; max-width:94vw; max-height:88vh; overflow-y:auto; background:var(--bg2); border:1px solid var(--line); border-radius:14px; padding:22px; box-shadow:var(--shadow)}
+.modal-card h3{margin-bottom:14px}
+.form-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px 12px}
+.form-grid .full{grid-column:1/-1}
+.modal-actions{display:flex; justify-content:flex-end; gap:10px; margin-top:18px}
+#toast{position:fixed; right:18px; bottom:18px; display:flex; flex-direction:column; gap:8px; z-index:80}
+.toast{background:var(--bg3); border:1px solid var(--line); border-left:3px solid var(--accent2); border-radius:9px; padding:10px 14px; font-size:12.5px; box-shadow:var(--shadow); max-width:360px; animation:tin .18s ease}
+.toast.err{border-left-color:var(--err)}
+.toast.ok{border-left-color:var(--ok)}
+@keyframes tin{from{transform:translateY(8px); opacity:0}to{transform:none; opacity:1}}
+.empty{color:var(--muted); text-align:center; padding:36px 10px; font-size:13px}
+video{width:100%; max-height:340px; background:#000; border-radius:8px; margin-top:8px}
+.spinner{width:14px;height:14px;border:2px solid var(--line);border-top-color:var(--accent2);border-radius:50%;animation:spin .7s linear infinite;display:inline-block}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+
+<!-- ================= LOGIN ================= -->
+<div id="login">
+  <div class="login-card">
+    <h1>cctv-server</h1>
+    <div class="sub">AI video surveillance console — sign in</div>
+    <form id="login-form">
+      <label>Username</label>
+      <input id="login-user" autocomplete="username" placeholder="admin" required>
+      <label>Password</label>
+      <input id="login-pass" type="password" autocomplete="current-password" placeholder="password" required>
+      <div class="login-error" id="login-error"></div>
+      <button class="btn primary" type="submit" style="width:100%; justify-content:center; margin-top:14px" id="login-btn">Sign in</button>
+    </form>
+  </div>
+</div>
+
+<!-- ================= APP ================= -->
+<div id="app" class="hidden">
+  <header>
+    <div class="brand"><span class="dot"></span>cctv-server</div>
+    <nav>
+      <button data-tab="live" class="active">Live</button>
+      <button data-tab="events">Events</button>
+      <button data-tab="recordings">Recordings</button>
+      <button data-tab="system">System</button>
+    </nav>
+    <div class="hdr-right">
+      <span class="pill"><span class="led" id="ws-led"></span><span id="ws-txt">connecting</span></span>
+      <span class="pill">up <span id="up-s"></span></span>
+      <span class="pill" id="user-pill"></span>
+      <button class="btn small" id="logout-btn">Sign out</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- LIVE -->
+    <section id="tab-live">
+      <div class="tab-head">
+        <h2>Live cameras</h2>
+        <div class="toolbar">
+          <button class="btn" id="refresh-cams-btn">⟳ Refresh</button>
+          <button class="btn primary" id="add-cam-btn">＋ Add camera</button>
+        </div>
+      </div>
+      <div class="grid" id="cam-grid"><div class="empty">Loading cameras…</div></div>
+    </section>
+
+    <!-- EVENTS -->
+    <section id="tab-events" class="hidden">
+      <div class="tab-head">
+        <h2>Event log</h2>
+        <div class="toolbar">
+          <select id="ev-cam" style="width:auto"><option value="">All cameras</option></select>
+          <select id="ev-sev" style="width:auto"><option value="">All severities</option>
+            <option>info</option><option>warning</option><option>error</option><option>critical</option></select>
+          <button class="btn small" id="ev-pause-btn">⏸ Pause</button>
+          <span class="muted" id="ev-count"></span>
+        </div>
+      </div>
+      <div class="panel"><table>
+        <thead><tr><th style="width:170px">Time</th><th style="width:110px">Camera</th><th style="width:120px">Kind</th><th style="width:80px">Severity</th><th>Message</th><th style="width:120px">Snapshot</th></tr></thead>
+        <tbody id="ev-body"><tr><td colspan="6" class="empty">Loading…</td></tr></tbody>
+      </table></div>
+    </section>
+
+    <!-- RECORDINGS -->
+    <section id="tab-recordings" class="hidden">
+      <div class="tab-head">
+        <h2>Recordings</h2>
+        <div class="toolbar">
+          <select id="rec-cam" style="width:auto"><option value="">All cameras</option></select>
+          <input id="rec-search" placeholder="Filter…" style="width:180px">
+          <button class="btn small" id="rec-refresh">⟳ Refresh</button>
+          <span class="muted" id="rec-count"></span>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="pbody" id="rec-player-wrap" style="display:none">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <b id="rec-player-title"></b>
+            <button class="btn small" id="rec-close-player">✕ Close player</button>
+          </div>
+          <video id="rec-player" controls preload="metadata"></video>
+        </div>
+        <table>
+          <thead><tr><th style="width:110px">Camera</th><th style="width:180px">Started</th><th style="width:90px">Duration</th><th style="width:100px">Size</th><th>File</th><th style="width:150px">Actions</th></tr></thead>
+          <tbody id="rec-body"><tr><td colspan="6" class="empty">Loading…</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SYSTEM -->
+    <section id="tab-system" class="hidden">
+      <div class="tab-head"><h2>System</h2><button class="btn small" id="sys-refresh">⟳ Refresh</button></div>
+
+      <div class="stat-cards" id="sys-stats"></div>
+
+      <div class="panel">
+        <div class="phead">Storage</div>
+        <div class="pbody">
+          <div class="kv" id="storage-kv"></div>
+          <div class="gauge" style="margin-top:12px"><i id="disk-gauge" style="width:0%"></i></div>
+          <div class="muted" style="font-size:11.5px; margin-top:6px" id="storage-warn"></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="phead">Health</div>
+        <div class="pbody"><div class="kv" id="health-kv"></div></div>
+      </div>
+
+      <div class="panel">
+        <div class="phead">Key metrics</div>
+        <div class="pbody"><div class="kv" id="metrics-kv"></div></div>
+      </div>
+
+      <div class="panel">
+        <div class="phead">AI</div>
+        <div class="pbody"><div class="kv" id="ai-kv"></div></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- ================= MODAL ================= -->
+<div id="modal" class="hidden">
+  <div class="modal-card">
+    <h3 id="modal-title">Add camera</h3>
+    <div class="form-grid">
+      <div><label class="muted">Name</label><input id="f-name" value="New Camera"></div>
+      <div><label class="muted">RTSP URL</label><input id="f-url" value="rtsp://user:pass@host:554/stream1"></div>
+      <div><label class="muted">Width</label><input id="f-w" type="number" value="1280"></div>
+      <div><label class="muted">Height</label><input id="f-h" type="number" value="720"></div>
+      <div><label class="muted">Source FPS</label><input id="f-fps" type="number" value="30"></div>
+      <div><label class="muted">Preview FPS (AI/motion)</label><input id="f-pfps" type="number" value="5"></div>
+      <div><label class="muted">Priority</label><select id="f-prio">
+        <option value="0">0 low</option><option value="1" selected>1 normal</option>
+        <option value="2">2 high</option><option value="3">3 critical</option></select></div>
+      <div><label class="muted">Group</label><input id="f-group" placeholder="optional"></div>
+      <div class="full"><label><input type="checkbox" id="f-rec" checked> Recording (copy-remux, no re-encode)</label></div>
+      <div class="full"><label><input type="checkbox" id="f-ai" checked> AI detection (YOLO)</label></div>
+      <div class="full"><label><input type="checkbox" id="f-motion" checked> Motion pre-filter</label></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn" id="modal-cancel">Cancel</button>
+      <button class="btn primary" id="modal-ok">Add camera</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+"use strict";
+/* ================= helpers ================= */
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmtDur = sec => {
+  sec = Math.round(sec || 0);
+  const h = Math.floor(sec/3600), m = Math.floor((sec%3600)/60), s = sec%60;
+  return (h? h+"h ":"") + (m || h? m+"m ":"") + s+"s";
+};
+const fmtSize = b => {
+  if (!b) return "0 B";
+  const u = ["B","KB","MB","GB","TB"]; let i = 0;
+  while (b >= 1024 && i < u.length-1) { b /= 1024; i++; }
+  return b.toFixed(i?1:0) + " " + u[i];
+};
+const fmtBytes = n => (n/1073741824).toFixed(1) + " GB";
+const fmtTs = t => { const d = new Date(t); return isNaN(d) ? "—" : d.toLocaleString(); };
+// Session is an HttpOnly SameSite cookie set by POST /api/auth/login.
+// No tokens are stored in localStorage; media/WS reuse the cookie.
+const now = () => new Date().toISOString();
+
+function toast(msg, kind){
+  const el = document.createElement("div");
+  el.className = "toast " + (kind||"");
+  el.textContent = msg;
+  $("#toast").appendChild(el);
+  setTimeout(()=>{ el.style.opacity="0"; el.style.transition="opacity .3s"; setTimeout(()=>el.remove(),320); }, 4200);
+}
+
+async function api(path, opts={}){
+  const headers = Object.assign({"Content-Type":"application/json"}, opts.headers||{});
+  const res = await fetch(path, Object.assign({}, opts, {headers}));
+  if (res.status === 401){
+    const t = await res.json().catch(()=>({}));
+    if (String(t.error).includes("authentic") || String(t.error).includes("expired")){
+      logout(true);
+    }
+    throw new Error(t.error || "unauthorized");
+  }
+  if (!res.ok){
+    const t = await res.json().catch(()=>({error:res.statusText}));
+    throw new Error(t.error || ("HTTP "+res.status));
+  }
+  const ct = res.headers.get("content-type")||"";
+  if (ct.includes("json")) return res.json();
+  return res;
+}
+
+/* ================= auth ================= */
+async function login(u, p){
+  await api("/api/auth/login", {method:"POST", body: JSON.stringify({username:u, password:p})});
+  await enterApp();
+}
+function logout(silent){
+  try { fetch("/api/auth/logout", {method:"POST"}); } catch(_){}
+  $("#app").classList.add("hidden");
+  $("#login").classList.remove("hidden");
+  if (!silent) toast("Signed out");
+  try { ws && ws.close(); } catch(_){}
+}
+async function enterApp(){
+  $("#login").classList.add("hidden");
+  $("#app").classList.remove("hidden");
+  try {
+    const info = await api("/api/auth/info");
+    $("#user-pill").textContent = info.username + " · " + (info.role||"user");
+  } catch(_){}
+  connectWS();
+  refreshCameras();
+  tickUptime();
+  loadEvents(); loadRecordings(); loadSystem();
+}
+
+/* ================= websocket ================= */
+let ws = null, wsTimer = null;
+function connectWS(){
+  const proto = location.protocol === "https:" ? "wss:" : "ws:";
+  const url = proto + "//" + location.host + "/ws";
+  try {
+    ws = new WebSocket(url);
+  } catch(_){ return; }
+  ws.onopen = () => { $("#ws-led").className = "led ok"; $("#ws-txt").textContent = "live"; };
+  ws.onclose = () => { $("#ws-led").className = "led err"; $("#ws-txt").textContent = "offline"; scheduleWS(); };
+  ws.onerror = () => { try{ws.close();}catch(_){} };
+  ws.onmessage = ev => {
+    try {
+      const m = JSON.parse(ev.data);
+      if (m.type === "status" && m.status){
+        const s = m.status;
+        if (s.cameras) $("#ws-txt").textContent = "live · " + s.cameras.connected + "/" + s.cameras.total + " cams";
+      } else if (m.type === "event" || m.type === "detection" || m.type === "camera"){
+        if (!document.querySelector("#tab-events").classList.contains("hidden") && !eventsPaused) loadEvents();
+        if (m.type === "event" && m.event && m.event.severity === "critical") toast("Critical: " + (m.event.message||""), "err");
+      }
+    } catch(_){}
+  };
+}
+function scheduleWS(){
+  clearTimeout(wsTimer);
+  wsTimer = setTimeout(()=>{ if (!$("#login").classList.contains("hidden")) connectWS(); }, 5000);
+}
+
+/* ================= tabs ================= */
+document.querySelectorAll("nav button").forEach(b => b.onclick = () => {
+  document.querySelectorAll("nav button").forEach(x => x.classList.remove("active"));
+  b.classList.add("active");
+  ["live","events","recordings","system"].forEach(t =>
+    $("#tab-"+t).classList.toggle("hidden", t !== b.dataset.tab));
+  if (b.dataset.tab === "events") loadEvents();
+  if (b.dataset.tab === "recordings") loadRecordings();
+  if (b.dataset.tab === "system") loadSystem();
+});
+
+/* ================= uptime ================= */
+let up0 = 0;
+function tickUptime(){ setInterval(()=>{ if (up0) $("#up-s").textContent = fmtDur(Date.now()/1000 - up0); }, 1000); }
+
+/* ================= cameras / live ================= */
+let cams = [];
+
+async function refreshCameras(){
+  try {
+    cams = await api("/api/cameras");
+    renderCameras();
+  } catch(e){ toast("Camera list: " + e.message, "err"); }
+}
+
+function camStatus(c){
+  const st = c.status || {};
+  if (st.connected) return ["ok", "connected"];
+  if (st.state === "reconnecting") return ["warn", "reconnecting"];
+  if (st.state === "offline") return ["err", "offline"];
+  return ["warn", st.state || "starting"];
+}
+
+function renderCameras(){
+  const g = $("#cam-grid");
+  if (!cams.length){ g.innerHTML = '<div class="empty">No cameras configured. Click “Add camera”.</div>'; return; }
+  g.innerHTML = "";
+  cams.forEach(c => {
+    const cfg = c.config || {}, st = c.status || {};
+    const [cls, label] = camStatus(c);
+    const frameUrl = "/api/cameras/"+encodeURIComponent(cfg.id)+"/frame";
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML =
+      '<div class="head">' +
+        '<div><div class="name">'+esc(cfg.name||cfg.id)+'</div><div class="id">'+esc(cfg.id)+'</div></div>' +
+        '<div class="spacer"></div>' +
+        '<span class="badge '+(cfg.enabled?"info":"warn")+'">'+(cfg.enabled?"enabled":"disabled")+'</span>' +
+        '<span class="badge '+cls+'">'+label+'</span>' +
+      '</div>' +
+      '<div class="cam-stage">' +
+        '<img alt="live" data-frame="'+frameUrl+'">' +
+        '<div class="ov"><span class="pill">'+esc(cfg.group||"—")+'</span></div>' +
+      '</div>' +
+      '<div class="cam-meta">' +
+        '<span>State <b class="st-state">'+esc(st.state||"—")+'</b></span>' +
+        '<span>Analyzer <b class="st-fps">'+(st.fps?Number(st.fps).toFixed(1):"0")+' fps</b></span>' +
+        '<span>Source <b>'+cfg.width+'×'+cfg.height+' @ '+cfg.fps+'</b></span>' +
+        '<span>Recording <b class="st-rec">'+(st.recording?"yes":"no")+'</b></span>' +
+        '<span>AI <b>'+(cfg.ai_enabled?"on":"off")+'</b></span>' +
+        '<span>Motion <b>'+(cfg.motion_enabled?"on":"off")+'</b></span>' +
+      '</div>' +
+      '<div class="cam-actions">' +
+        '<button class="btn small primary snap-btn">📷 Snapshot</button>' +
+        '<button class="btn small tog-btn">'+(cfg.enabled?"Pause":"Resume")+'</button>' +
+        '<div style="flex:1"></div>' +
+        '<button class="btn small danger del-btn">Delete</button>' +
+      '</div>';
+    const img = card.querySelector("img");
+    if (cfg.enabled){
+      const tick = () => {
+        if (!document.querySelector("#tab-live").classList.contains("hidden") && document.body.contains(img)){
+          img.src = frameUrl + "?t=" + Date.now();
+        }
+      };
+      tick();
+      card._t = setInterval(tick, 1100);
+    } else {
+      img.replaceWith(Object.assign(document.createElement("div"), {className:"off", textContent:"camera paused"}));
+    }
+    card.querySelector(".snap-btn").onclick = async () => {
+      const btn = card.querySelector(".snap-btn");
+      btn.disabled = true; btn.textContent = "…";
+      try {
+        const r = await api("/api/cameras/"+encodeURIComponent(cfg.id)+"/snapshot", {method:"POST"});
+        toast("Snapshot saved: " + ((r.snapshot && r.snapshot.path) || "ok"), "ok");
+      } catch(e){ toast("Snapshot: "+e.message, "err"); }
+      btn.disabled = false; btn.textContent = "📷 Snapshot";
+    };
+    card.querySelector(".tog-btn").onclick = async () => {
+      try {
+        const body = Object.assign({}, cfg, {enabled: !cfg.enabled});
+        delete body.id;
+        await api("/api/cameras/"+encodeURIComponent(cfg.id), {method:"PUT", body: JSON.stringify(body)});
+        toast("Camera " + (cfg.enabled?"paused":"resumed"), "ok");
+        refreshCameras();
+      } catch(e){ toast("Update: "+e.message, "err"); }
+    };
+    card.querySelector(".del-btn").onclick = async () => {
+      if (!confirm("Delete camera "+cfg.id+"? Recordings are kept on disk.")) return;
+      try {
+        await api("/api/cameras/"+encodeURIComponent(cfg.id), {method:"DELETE"});
+        toast("Camera deleted", "ok");
+        refreshCameras();
+      } catch(e){ toast("Delete: "+e.message, "err"); }
+    };
+    g.appendChild(card);
+  });
+}
+$("#refresh-cams-btn").onclick = refreshCameras;
+
+/* ================= add camera modal ================= */
+$("#add-cam-btn").onclick = () => {
+  $("#modal-title").textContent = "Add camera";
+  $("#f-name").value = "New Camera"; $("#f-url").value = "rtsp://user:pass@host:554/stream1";
+  $("#f-w").value = 1280; $("#f-h").value = 720; $("#f-fps").value = 30; $("#f-pfps").value = 5;
+  $("#f-prio").value = 1; $("#f-group").value = ""; $("#f-rec").checked = true;
+  $("#f-ai").checked = true; $("#f-motion").checked = true;
+  $("#modal").classList.remove("hidden");
+};
+$("#modal-cancel").onclick = () => $("#modal").classList.add("hidden");
+$("#modal-ok").onclick = async () => {
+  const body = {
+    name: $("#f-name").value.trim() || "Camera",
+    rtsp_url: $("#f-url").value.trim(),
+    width: parseInt($("#f-w").value)||1280,
+    height: parseInt($("#f-h").value)||720,
+    fps: parseInt($("#f-fps").value)||30,
+    preview_fps: parseInt($("#f-pfps").value)||5,
+    priority: parseInt($("#f-prio").value)||1,
+    group: $("#f-group").value.trim() || null,
+    recording: $("#f-rec").checked,
+    ai_enabled: $("#f-ai").checked,
+    motion_enabled: $("#f-motion").checked,
+  };
+  if (!body.rtsp_url.startsWith("rtsp://")){ toast("RTSP URL must start with rtsp://", "err"); return; }
+  try {
+    const r = await api("/api/cameras", {method:"POST", body: JSON.stringify(body)});
+    $("#modal").classList.add("hidden");
+    toast("Camera added: " + r.id, "ok");
+    refreshCameras();
+  } catch(e){ toast("Add: "+e.message, "err"); }
+};
+
+/* ================= events ================= */
+let eventsPaused = false;
+function fillCamSelect(){
+  const opts = cams.map(c => "<option value=\""+esc(c.config.id)+"\">"+esc(c.config.name||c.config.id)+"</option>").join("");
+  $("#ev-cam").innerHTML = '<option value="">All cameras</option>' + opts;
+  $("#rec-cam").innerHTML = '<option value="">All cameras</option>' + opts;
+}
+async function loadEvents(){
+  if (eventsPaused) return;
+  try {
+    const cam = $("#ev-cam").value, sev = $("#ev-sev").value;
+    let q = "/api/events?limit=300";
+    if (cam) q += "&camera_id=" + encodeURIComponent(cam);
+    const evs = await api(q);
+    $("#ev-count").textContent = evs.length + " shown";
+    const body = $("#ev-body");
+    body.innerHTML = "";
+    if (!evs.length){ body.innerHTML = '<tr><td colspan="6" class="empty">No events yet.</td></tr>'; return; }
+    evs.filter(e => !sev || (e.severity||"").toLowerCase() === sev).forEach(e => {
+      const tr = document.createElement("tr");
+      const snap = e.snapshot_path
+        ? '<a href="javascript:void(0)" class="snap-link" data-path="'+esc(e.snapshot_path)+'">view</a>'
+        : '<span class="muted">—</span>';
+      tr.innerHTML =
+        '<td class="mono">'+esc(fmtTs(e.ts))+'</td>' +
+        '<td>'+esc(e.camera_id||"—")+'</td>' +
+        '<td>'+esc(e.kind||"—")+'</td>' +
+        '<td><span class="sev '+(e.severity||"info")+'">'+esc(e.severity||"info")+'</span></td>' +
+        '<td>'+esc(e.message||"")+'</td>' +
+        '<td>'+snap+'</td>';
+      body.appendChild(tr);
+    });
+    body.querySelectorAll(".snap-link").forEach(a => a.onclick = () => openSnapshot(a.dataset.path));
+  } catch(e){ /* silent */ }
+}
+function openSnapshot(path){
+  const m = document.createElement("div");
+  m.style.cssText = "position:fixed;inset:0;background:rgba(5,8,11,.8);display:flex;align-items:center;justify-content:center;z-index:70;cursor:pointer";
+  m.innerHTML = '<img src="/api/media?path='+encodeURIComponent(path)+'" style="max-width:94vw;max-height:90vh;border-radius:8px">';
+  m.onclick = () => m.remove();
+  document.body.appendChild(m);
+}
+$("#ev-pause-btn").onclick = () => {
+  eventsPaused = !eventsPaused;
+  $("#ev-pause-btn").textContent = eventsPaused ? "▶ Resume" : "⏸ Pause";
+  if (!eventsPaused) loadEvents();
+};
+$("#ev-cam").onchange = loadEvents;
+$("#ev-sev").onchange = loadEvents;
+setInterval(() => { if (!eventsPaused && !document.querySelector("#tab-events").classList.contains("hidden") && !$("#login").classList.contains("hidden")) loadEvents(); }, 3000);
+
+/* ================= recordings ================= */
+let recs = [];
+async function loadRecordings(){
+  try {
+    let q = "/api/recordings?limit=1000";
+    const cam = $("#rec-cam").value;
+    if (cam) q += "&camera_id=" + encodeURIComponent(cam);
+    recs = await api(q);
+    renderRecordings();
+  } catch(e){ toast("Recordings: "+e.message, "err"); }
+}
+function renderRecordings(){
+  const q = $("#rec-search").value.toLowerCase();
+  const body = $("#rec-body");
+  const list = recs.filter(r => !q || (r.path||"").toLowerCase().includes(q) || (r.camera_id||"").toLowerCase().includes(q));
+  $("#rec-count").textContent = list.length + " segments";
+  body.innerHTML = "";
+  if (!list.length){ body.innerHTML = '<tr><td colspan="6" class="empty">No recordings found.</td></tr>'; return; }
+  list.forEach(r => {
+    const tr = document.createElement("tr");
+    tr.innerHTML =
+      '<td>'+esc(r.camera_id||"—")+'</td>' +
+      '<td class="mono">'+esc(fmtTs(r.start_ts))+'</td>' +
+      '<td>'+fmtDur(r.duration_seconds||0)+'</td>' +
+      '<td>'+fmtSize(r.size_bytes||0)+'</td>' +
+      '<td class="mono muted">'+esc((r.path||"").split("/").pop())+'</td>' +
+      '<td><button class="btn small play-btn">▶ Play</button> ' +
+      '<a class="btn small" href="/api/media?path='+encodeURIComponent(r.path)+'" download>⬇</a></td>';
+    body.appendChild(tr);
+  });
+  body.querySelectorAll(".play-btn").forEach((b, i) => b.onclick = () => playRecording(list[i]));
+}
+function playRecording(r){
+  $("#rec-player-wrap").style.display = "block";
+  $("#rec-player-title").textContent = r.camera_id + " — " + fmtTs(r.start_ts) + " (" + fmtDur(r.duration_seconds||0) + ")";
+  const v = $("#rec-player");
+  v.src = "/api/media?path=" + encodeURIComponent(r.path);
+  v.load(); v.play().catch(()=>{});
+}
+$("#rec-close-player").onclick = () => {
+  $("#rec-player-wrap").style.display = "none";
+  $("#rec-player").pause(); $("#rec-player").removeAttribute("src");
+};
+$("#rec-cam").onchange = loadRecordings;
+$("#rec-refresh").onclick = loadRecordings;
+let recSearchT = null;
+$("#rec-search").oninput = () => { clearTimeout(recSearchT); recSearchT = setTimeout(renderRecordings, 250); };
+
+/* ================= system ================= */
+async function loadSystem(){
+  try {
+    const [sys, mets, ver, storage] = await Promise.all([
+      api("/api/system"), api("/api/metrics"), api("/api/version"), api("/api/storage")
+    ]);
+    up0 = Math.floor(Date.now()/1000) - (sys.uptime_seconds||0);
+    $("#up-s").textContent = fmtDur(sys.uptime_seconds||0);
+
+    const cpu = sys.cpu||{}, ram = sys.ram||{}, disk = sys.disk||{};
+    $("#sys-stats").innerHTML =
+      stat("CPU", (cpu.percent||0).toFixed(1)+"%", cpu.cores+" cores", cpu.percent) +
+      stat("RAM", fmtBytes(ram.used_bytes||0)+" / "+fmtBytes(ram.total_bytes||0), (ram.percent||0).toFixed(1)+"% used", ram.percent) +
+      stat("Disk", fmtBytes(disk.used_bytes||0)+" / "+fmtBytes(disk.total_bytes||0), (disk.percent||0).toFixed(1)+"% used", disk.percent) +
+      stat("Free disk", fmtBytes(disk.free_bytes||0), "recording budget", disk.free_bytes ? Math.min(100, (disk.free_bytes/(disk.total_bytes||1))*100) : 0, true);
+
+    $("#disk-gauge").style.width = Math.min(100, disk.percent||0) + "%";
+    $("#disk-gauge").className = (disk.percent||0) > 85 ? "warn" : "";
+    $("#storage-kv").innerHTML =
+      kv("Recordings", fmtBytes(disk.recordings_bytes||0)) +
+      kv("Snapshots", fmtBytes(disk.snapshots_bytes||0)) +
+      kv("Database", fmtBytes(disk.database_bytes||0)) +
+      kv("Retention (recordings)", (storage.config&&storage.config.retention_days)+" days") +
+      kv("Retention (snapshots)", (storage.config&&storage.config.snapshot_retention_days)+" days") +
+      kv("Recordings dir", esc(storage.config&&storage.config.recordings_dir||"")) +
+      kv("Snapshots dir", esc(storage.config&&storage.config.snapshots_dir||""));
+    const warns = disk.warnings||[];
+    $("#storage-warn").textContent = warns.length ? "⚠ " + warns.join(" · ") : "No storage warnings";
+
+    const h = await api("/api/health");
+    $("#health-kv").innerHTML =
+      kv("Status", h.status) +
+      kv("Database", h.db) +
+      kv("AI model loaded", h.ai_model_loaded ? "yes" : "no") +
+      kv("Cameras", h.cameras) +
+      kv("Uptime", fmtDur(h.uptime_seconds||0)) +
+      kv("Version", esc(ver.version||"")+" ("+esc(ver.app||"")+")") +
+      kv("FFmpeg", esc((ver.ffmpeg||"").split(" ").slice(0,3).join(" "))) +
+      kv("Acceleration", esc(ver.acceleration||"—")) +
+      kv("AI model", esc(ver.model||"—"));
+
+    const ai = mets;
+    $("#ai-kv").innerHTML =
+      kv("Model", esc(ai.model||"—") + (ai.model_loaded?" (loaded)":" (not loaded)")) +
+      kv("Inferences", (ai.inferences_total||0).toLocaleString()) +
+      kv("AI FPS (running)", (ai.ai_fps_total||0).toFixed(1)) +
+      kv("Avg inference latency", (ai.avg_inference_latency_us||0).toLocaleString()+" µs") +
+      kv("Frames dropped (pressure)", (ai.frames_dropped_total||0).toLocaleString()) +
+      kv("Scheduler state", esc(ai.scheduler_state||"—"));
+
+    const keyMetrics = [
+      ["Uptime", fmtDur(mets.uptime_seconds||0)],
+      ["Events", mets.events_total||0],
+      ["Detections", mets.detections_total||0],
+      ["Motion frames", mets.motion_frames_total||0],
+      ["Recordings written", (mets.recordings_total||0)+" ("+fmtSize(mets.recording_bytes_written||0)+")"],
+      ["Snapshots", mets.snapshots_total||0],
+      ["Restarts (recovery)", mets.restarts_total||0],
+      ["Reconnects", mets.camera_reconnects_total||0],
+      ["Offline events", mets.camera_offline_events_total||0],
+      ["Queue pressure events", mets.queue_pressure_total||0],
+      ["DB errors", mets.db_errors_total||0],
+      ["Disk free", fmtBytes(mets.disk_free_bytes||0)],
+    ];
+    $("#metrics-kv").innerHTML = keyMetrics.map(([k,v]) => kv(k, v)).join("");
+  } catch(e){ toast("System: "+e.message, "err"); }
+}
+function stat(k, v, s, pct, invert){
+  const w = Math.min(100, Math.max(0, pct||0));
+  return '<div class="stat"><div class="k">'+k+'</div><div class="v">'+v+'</div><div class="s">'+s+'</div>' +
+    '<div class="gauge"><i class="'+(w>85?'warn':'')+'" style="width:'+w+'%"></i></div></div>';
+}
+function kv(k, v){ return '<div>'+k+'</div><div>'+v+'</div>'; }
+$("#sys-refresh").onclick = loadSystem;
+
+/* ================= boot ================= */
+$("#login-form").onsubmit = async ev => {
+  ev.preventDefault();
+  const btn = $("#login-btn"); btn.disabled = true; btn.textContent = "Signing in…";
+  $("#login-error").textContent = "";
+  try { await login($("#login-user").value, $("#login-pass").value); }
+  catch(e){ $("#login-error").textContent = e.message; }
+  btn.disabled = false; btn.textContent = "Sign in";
+};
+$("#logout-btn").onclick = () => logout(false);
+
+(async function boot(){
+  // If a session cookie exists, enter the app; otherwise show login.
+  try {
+    const info = await api("/api/auth/info");
+    if (info && info.authenticated){ await enterApp(); return; }
+  } catch(_){}
+  $("#login").classList.remove("hidden");
+})();
+</script>
+</body>
+</html>

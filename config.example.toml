@@ -1,0 +1,166 @@
+# =====================================================================
+# cctv-server v1.0.2 — master configuration
+# Location: /etc/cctv-server/config.toml   (0640 root:cctv)
+#
+# Do NOT put passwords or secrets in this file.
+#
+# First-run admin password: `init` generates a strong random password,
+# prints it ONCE and (when run by the installer with --password-file)
+# writes it once to a 0600 file that the operator deletes after first
+# login. Plaintext bootstrap passwords are never stored in secrets.env,
+# config.toml, the database or logs.
+#
+# To set a password explicitly for automation, pass the environment
+# variable CCTV_ADMIN_PASSWORD=<pw> to `init` (transient, never written
+# to disk) and unset it afterwards.
+# =====================================================================
+
+[server]
+# Bind address. Keep 127.0.0.1 when the dashboard is used on the same
+# machine; use 0.0.0.0 only behind a trusted firewall.
+host = "0.0.0.0"
+port = 8080
+name = "cctv-server"
+version = "1.0.2"
+
+# Optional override for the dashboard directory (default: /opt/cctv-server/web)
+# web_dir = "/opt/cctv-server/web"
+
+[storage]
+recordings_dir = "/var/lib/cctv-server/recordings"
+snapshots_dir = "/var/lib/cctv-server/snapshots"
+database_dir = "/var/lib/cctv-server/database"
+data_dir = "/var/lib/cctv-server/state"
+# Recording retention in days (oldest files purged by the sweeper).
+retention_days = 7
+snapshot_retention_days = 7
+# Disk-pressure thresholds. The server degrades gracefully before it
+# ever fills the disk (see docs/ARCHITECTURE.md "safety").
+low_disk_warning_percent = 80
+critical_disk_percent = 90
+max_snapshots_per_camera = 500
+scan_interval_seconds = 30
+
+[database]
+path = "/var/lib/cctv-server/database/cctv.db"
+journal_mode = "WAL"
+busy_timeout_ms = 5000
+
+[logging]
+level = "info"            # trace | debug | info | warn | error
+file = "/var/log/cctv-server/cctv-server.log"
+format = "text"           # text | json (rotated daily)
+
+[cameras.defaults]
+reconnect_backoff_base_ms = 1000
+reconnect_backoff_max_ms = 60000
+reconnect_backoff_factor = 2.0
+connection_timeout_seconds = 10
+read_timeout_seconds = 15
+# A camera is declared offline after this many seconds without frames.
+offline_event_threshold_seconds = 30
+health_interval_seconds = 5
+default_fps = 30
+default_preview_fps = 10
+max_retries_per_backoff_cycle = 10
+
+[recording]
+segment_seconds = 300     # mp4 segment length (copy/remux, no re-encode)
+enabled_by_default = true
+format = "h264"
+container_muxer = "mp4"
+hardware_encode = false
+
+[ai]
+enabled_by_default = true
+model_dir = "/opt/cctv-server/models"
+model_file = "yolov8n.onnx"   # YOLOv8n ONNX; server degrades to motion-only if absent
+# model_sha256 = "<optional sha256 pin, validated by `model validate`>"
+default_max_fps = 2.0
+idle_fps = 0.5
+motion_fps = 2.0
+active_fps = 5.0
+input_size = 640
+conf_threshold = 0.35
+iou_threshold = 0.45
+max_inference_latency_ms = 250
+scheduler_interval_ms = 2000
+cpu_high_load_percent = 75
+cpu_critical_load_percent = 90
+ram_high_pressure_percent = 85
+min_cameras_active_ratio = 0.25
+queue_capacity = 2        # bounded AI queue; drops frames before touching NVR
+engine = "onnx"
+
+[motion]
+enabled_by_default = true
+frame_width = 160
+frame_height = 90
+# Raise threshold on noisy feeds, lower for subtle motion.
+threshold = 12
+sensitivity = 1.0
+debounce_seconds = 2
+
+[events]
+cooldown_seconds = 10
+detection_debounce_seconds = 5
+snapshot_on_event = true
+event_retention_days = 30
+
+[auth]
+session_ttl_seconds = 86400
+default_admin_user = "admin"
+# LEAVE EMPTY. First `init` generates a random password automatically.
+default_admin_password = ""
+token_length = 48
+require_auth_for_api = true
+# Login brute-force protection: N failures per (IP, username) in the
+# window → lockout. In-memory (resets on restart).
+max_login_attempts = 10
+rate_limit_window_seconds = 300
+lockout_seconds = 300
+# Optional KEY=VALUE secrets file. No secrets are required: sessions are
+# opaque server-side tokens and passwords are Argon2id hashed. Leave unset
+# for the default install; if you set it, the file must be readable by the
+# service user (the packaged unit passes it via EnvironmentFile=, root-owned
+# 0600, and the service itself does not need file access).
+# secrets_file = "/etc/cctv-server/secrets.env"
+# cookie_secure: add `Secure` to session cookies. Set TRUE only when the
+# server is served over HTTPS (direct TLS or reverse proxy with TLS).
+# Keep FALSE for plain-HTTP LAN deployments, otherwise browsers on http://
+# will refuse to send the cookie and login will appear broken.
+cookie_secure = false
+
+[security]
+enable_api = true
+enable_websocket = true
+enable_dashboard = true
+cors_allowed_origins = []   # same-origin dashboard by default
+
+[hardware]
+acceleration = "auto"      # auto | none | vaapi | qsv
+enable_vaapi = true
+enable_qsv = true
+
+[monitoring]
+metrics_interval_seconds = 2
+websocket_broadcast_interval_ms = 2000
+cpu_sample_interval_ms = 1000
+storage_check_interval_seconds = 60
+
+# =====================================================================
+# Optional: inline camera definitions (managed via the API otherwise).
+# [[cameras.cameras]]
+# name = "Front Door"
+# rtsp_url = "rtsp://user:pass@192.168.1.50:554/stream1"
+# enabled = true
+# recording = true
+# ai_enabled = true
+# motion_enabled = true
+# priority = 1
+# fps = 30
+# preview_fps = 5
+# width = 1280
+# height = 720
+# group = "Perimeter"
+# =====================================================================
