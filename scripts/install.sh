@@ -128,6 +128,8 @@ if ! getent passwd cctv >/dev/null 2>&1; then
   run useradd --system --gid cctv --home-dir /var/lib/cctv-server \
       --shell /usr/sbin/nologin --comment "cctv-server service user" cctv
 fi
+getent group video >/dev/null 2>&1 && run usermod -aG video cctv || true
+getent group render >/dev/null 2>&1 && run usermod -aG render cctv || true
 
 say "creating directories"
 run install -d -m 0755 -o root -g cctv /opt/cctv-server/bin /opt/cctv-server/web \
@@ -190,6 +192,9 @@ if [[ -f "$RELEASE_DIR/config/config.example.toml" ]]; then
 fi
 if [[ -f "$RELEASE_DIR/config/profile-i5-8gb.toml" ]]; then
   run install -m 0644 -o root -g cctv "$RELEASE_DIR/config/profile-i5-8gb.toml" /opt/cctv-server/config/profile-i5-8gb.toml
+fi
+if [[ -f "$RELEASE_DIR/scripts/setup-igpu.sh" ]]; then
+  run install -m 0755 -o root -g cctv "$RELEASE_DIR/scripts/setup-igpu.sh" /opt/cctv-server/bin/setup-igpu.sh
 fi
 
 say "preparing secrets file"

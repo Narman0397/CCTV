@@ -10,16 +10,19 @@ StartLimitIntervalSec=60
 Type=simple
 User=cctv
 Group=cctv
-# Optional secrets file (mode 0600 root:root). Leading '-' means missing file is not fatal.
+# iGPU decode (VAAPI/QSV) needs /dev/dri and group render/video
+SupplementaryGroups=video render
 EnvironmentFile=-/etc/cctv-server/secrets.env
 Environment=PATH=/opt/cctv-server/bin:/usr/local/bin:/usr/bin:/bin
+# Optional: matching libonnxruntime.so (OpenVINO EP beside it). Uncomment via drop-in.
+# Environment=ORT_DYLIB_PATH=/opt/cctv-server/lib/libonnxruntime.so
+# Environment=LD_LIBRARY_PATH=/opt/cctv-server/lib
 ExecStart=/opt/cctv-server/bin/cctv-server serve --config /etc/cctv-server/config.toml
 Restart=on-failure
 RestartSec=5
 TimeoutStopSec=30
 UMask=0027
 
-# --- hardening (see systemd-analyze security cctv-server.service) ---
 NoNewPrivileges=true
 PrivateTmp=true
 ProtectSystem=strict
@@ -38,8 +41,11 @@ MemoryDenyWriteExecute=false
 CapabilityBoundingSet=
 AmbientCapabilities=
 RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+DeviceAllow=/dev/dri rw
+DeviceAllow=char-drm rw
 
 ReadWritePaths=/var/lib/cctv-server /var/log/cctv-server
+ReadOnlyPaths=/opt/cctv-server
 
 LimitNOFILE=65536
 LimitNPROC=1024

@@ -1,20 +1,18 @@
 # =====================================================================
-# Hardware profile: Intel Core i5 + 8 GB RAM, CPU AI (YOLOv8n)
-# Copy the [cameras.defaults] / [ai] / [hardware] / [motion] blocks into
-# /etc/cctv-server/config.toml (or start from config.example.toml which
-# already uses these values) then: systemctl restart cctv-server
+# Profile: Intel Core i5-8250U class (4C/8T, 15 W, UHD 620) + 8 GB RAM
+# Maximize FFmpeg VAAPI/QSV + YOLOv8n @ 320. Merge into config.toml
+# then: sudo systemctl restart cctv-server
 #
-# Capacity (honest, CPU-only):
-#   4 cameras  — AI on all, ~1.5–2 FPS, 720p record copy
-#   6 cameras  — AI 1 FPS or input_size=320
-#   8–10       — AI on 2–4 priority cameras only
-# Use camera substream for analyzer/AI; keep main stream for recording
-# via the camera's own high-res URL if you split (API per camera).
+# Capacity (CPU YOLO; OpenVINO iGPU is extra if ORT EP is present):
+#   2 cameras — AI on both @ 1.0–1.5 FPS (comfortable)
+#   4 cameras — AI on all only with input_size=320 + substream + VAAPI
+#   6+        — AI on 2 priority cameras
+# Point rtsp_url at the camera SUBSTREAM (stream2 / 640×360 / 720p@15).
 # =====================================================================
 
 [cameras.defaults]
 default_fps = 15
-default_preview_fps = 5
+default_preview_fps = 4
 
 [recording]
 segment_seconds = 300
@@ -24,17 +22,17 @@ hardware_encode = false
 [ai]
 enabled_by_default = true
 model_file = "yolov8n.onnx"
-default_max_fps = 2.0
-idle_fps = 0.4
-motion_fps = 1.5
-active_fps = 2.0
-input_size = 640
+default_max_fps = 1.5
+idle_fps = 0.3
+motion_fps = 1.0
+active_fps = 1.5
+input_size = 320
 conf_threshold = 0.35
 iou_threshold = 0.45
-max_inference_latency_ms = 250
-cpu_high_load_percent = 70
-cpu_critical_load_percent = 85
-ram_high_pressure_percent = 80
+max_inference_latency_ms = 200
+cpu_high_load_percent = 65
+cpu_critical_load_percent = 80
+ram_high_pressure_percent = 75
 queue_capacity = 2
 engine = "onnx"
 
@@ -50,15 +48,3 @@ debounce_seconds = 2
 acceleration = "auto"
 enable_vaapi = true
 enable_qsv = true
-
-# Optional extra cameras: disable AI
-# [[cameras.cameras]]
-# name = "Yard"
-# rtsp_url = "rtsp://user:pass@192.168.1.51:554/stream2"
-# ai_enabled = false
-# motion_enabled = true
-# recording = true
-# fps = 15
-# preview_fps = 4
-# width = 1280
-# height = 720

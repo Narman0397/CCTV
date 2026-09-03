@@ -67,6 +67,25 @@ Practices that actually raise effectiveness on this SKU:
 4. Watch `/api/system` (CPU &lt; 75%, RAM &lt; 80%) and
    `frames_dropped` on `/api/metrics`.
 
+## i5-8250U + 8 GB (FFmpeg VAAPI + nano@320)
+
+This SKU is 15 W / UHD 620. Shipped defaults now use `input_size = 320`,
+`active_fps = 1.5`, `preview_fps = 4`. After install:
+
+```bash
+sudo /opt/cctv-server/bin/setup-igpu.sh    # groups, vainfo, ffmpeg hwaccels
+sudo apt install -y ffmpeg intel-media-va-driver-non-free   # VAAPI-capable ffmpeg
+# cameras: RTSP substream only
+curl -s http://127.0.0.1:8080/api/health    # ai_model_loaded
+sudo intel_gpu_top                          # Video engine should move
+```
+
+OpenVINO on the iGPU needs a **matching** `libonnxruntime.so` plus the
+OpenVINO EP next to it. Point systemd at it only after `model validate`
+succeeds — a wrong wheel panics (`BadVersion`). Example drop-in:
+`/etc/systemd/system/cctv-server.service.d/ort.conf.example`
+(written by `setup-igpu.sh`).
+
 ## Benchmark CLI
 
 ```bash

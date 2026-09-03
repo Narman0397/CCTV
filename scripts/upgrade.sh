@@ -187,6 +187,9 @@ if [[ -f "$NEW_ROOT/config/profile-i5-8gb.toml" ]]; then
   mkdir -p /opt/cctv-server/config
   install -m 0644 -o root -g cctv "$NEW_ROOT/config/profile-i5-8gb.toml" /opt/cctv-server/config/profile-i5-8gb.toml
 fi
+if [[ -f "$NEW_ROOT/scripts/setup-igpu.sh" ]]; then
+  install -m 0755 -o root -g cctv "$NEW_ROOT/scripts/setup-igpu.sh" /opt/cctv-server/bin/setup-igpu.sh
+fi
 if [[ -f "$NEW_ROOT/VERSION" ]]; then
   install -m 0644 -o root -g cctv "$NEW_ROOT/VERSION" /opt/cctv-server/VERSION
 fi

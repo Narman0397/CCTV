@@ -28,7 +28,8 @@ executable, one service, one config**.
 - Measured performance (2-core CPU box, YOLOv8n ONNX): ~83–88
   ms/inference, ~1.7 AI FPS/camera live; 10 cameras without AI → server
   ~1% CPU / ~14 MB RSS. Defaults are tuned for **Intel Core i5 + 8 GB
-  RAM** (4 AI cameras @ ~2 FPS): `config/profile-i5-8gb.toml`. See
+  RAM / i5-8250U** (YOLOv8n @ 320, VAAPI): `config/profile-i5-8gb.toml`.
+  After install run `sudo /opt/cctv-server/bin/setup-igpu.sh`. See
   `docs/PERFORMANCE.md` — the old "10 FPS/camera AI" target is **not**
   achievable on CPU-only.
 

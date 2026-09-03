@@ -20,11 +20,11 @@
     },
     {
       "path": "web/index.html",
-      "sha256": "3af4cf90fba186c5b53c78f8d161a0a6925946ae212365df497947bf8e0ce46d"
+      "sha256": "a64f1c24c50e2366e48cf7d2f33a4543b84aa5e8347729e8da9b76a83ab51aed"
     },
     {
       "path": "config/config.example.toml",
-      "sha256": "f62931647ad5761a1406cec18c47cd1969c0630d5f8504a917bbb0fd55a1a356"
+      "sha256": "6b20fba018a406c4023cdc44f356346de32e82c8b23cd4cd97efcf301855e749"
     },
     {
       "path": "models/README.md",
@@ -36,15 +36,15 @@
     },
     {
       "path": "systemd/cctv-server.service",
-      "sha256": "1edf090cd7b1c12ba10c8f15fd469a4b97dba289d6d1e22c01a485b84e46d76a"
+      "sha256": "01ea79b837861a4c51c2f92f000c79c037e485565932e4890dbda6338611cc25"
     },
     {
       "path": "scripts/install.sh",
-      "sha256": "aa02a70cb1e014c54e802ac082545b01cba986e2843119c58679a3b0b5e7b783"
+      "sha256": "468ead833b7c9bcacd39b2e18fc9472d51f45a1a383a92554cb430265a1d941f"
     },
     {
       "path": "scripts/upgrade.sh",
-      "sha256": "6169b907b5c2555609df10f2958ff2e6c064dc1ab670cc147357128318dbb0ea"
+      "sha256": "c231115d76d4b67b4ab9283eba1250157786c3ddacdf2f3a7f175e5ea2863a0c"
     },
     {
       "path": "scripts/uninstall.sh",
@@ -64,7 +64,7 @@
     },
     {
       "path": "README.md",
-      "sha256": "4da84f36d2e300251f291366c0c6831328d8e99478e54275be6dc54d206b542e"
+      "sha256": "6f316ced593cd30a92293f30c8e378480c7c81b32078fd1a79e6cf4bbbc1b110"
     },
     {
       "path": "docs/ARCHITECTURE.md",
@@ -92,7 +92,7 @@
     },
     {
       "path": "docs/PERFORMANCE.md",
-      "sha256": "ca0cb27bedf22db6d7f3f5e4f18450e23e4e47f65647135f41dffa4367fdfb5b"
+      "sha256": "812867d495ad5581e8f442297665078fcefa5a02ca7d47686e84d30924b12ed3"
     },
     {
       "path": "docs/RELEASE-REPORT-v1.0.2.md",
@@ -116,7 +116,11 @@
     },
     {
       "path": "config/profile-i5-8gb.toml",
-      "sha256": "bfb35ec3bb47a992e6f8ae2aa11d38bc22b94a25eaba528d08cfd05d66cf9372"
+      "sha256": "6f03a43c05b73a36eb228a3f9ec88e9891721d48fa9006db64103c0bae3de238"
+    },
+    {
+      "path": "scripts/setup-igpu.sh",
+      "sha256": "284a7dfc40870ae1c5ea7cba9129633f823e448e7921629294b670f094d3bb73"
     }
   ],
   "cargo_lock_sha256": "af030b7b4da6570a7dac9df4a8289d30ee6bbf81111bd33838c494d82896e8fe"
