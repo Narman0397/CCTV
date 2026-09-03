@@ -679,7 +679,7 @@ async function loadSystem(){
 
     const ai = mets;
     $("#ai-kv").innerHTML =
-      kv("Model", esc(ai.model||"—") + (ai.model_loaded?" (loaded)":" (not loaded)")) +
+      kv("Model", (ai.model||"—") + (ai.model_loaded?" (loaded)":" (not loaded)")) +
       kv("Inferences", (ai.inferences_total||0).toLocaleString()) +
       kv("AI FPS (running)", (ai.ai_fps_total||0).toFixed(1)) +
       kv("Avg inference latency", (ai.avg_inference_latency_us||0).toLocaleString()+" µs") +
@@ -708,7 +708,7 @@ function stat(k, v, s, pct, invert){
   return '<div class="stat"><div class="k">'+k+'</div><div class="v">'+v+'</div><div class="s">'+s+'</div>' +
     '<div class="gauge"><i class="'+(w>85?'warn':'')+'" style="width:'+w+'%"></i></div></div>';
 }
-function kv(k, v){ return '<div>'+k+'</div><div>'+v+'</div>'; }
+function kv(k, v){ return '<div>'+esc(k)+'</div><div>'+esc(v)+'</div>'; }
 $("#sys-refresh").onclick = loadSystem;
 
 /* ================= boot ================= */

@@ -33,6 +33,21 @@ trap 'echo "ERROR: install failed at line $LINENO — re-run the installer to co
 ARCH="$(uname -m)"
 [[ "$ARCH" == "x86_64" ]] || die "unsupported architecture: $ARCH (this release targets x86_64)"
 
+# This release binary is dynamically linked against GLIBC 2.39 (Ubuntu 24.04 /
+# Debian 13). Ubuntu 22.04 (GLIBC 2.35) and Debian 12 (2.36) cannot run it.
+glibc_ok() {
+  local ver
+  ver="$(ldd --version 2>/dev/null | awk 'NR==1{print $NF}')"
+  [[ -n "$ver" ]] || return 1
+  awk -v v="$ver" 'BEGIN{
+    n=split(v,a,"."); maj=a[1]+0; min=a[2]+0;
+    exit !((maj>2) || (maj==2 && min>=39))
+  }'
+}
+if ! glibc_ok; then
+  die "this binary requires GLIBC 2.39+ (Ubuntu 24.04 or Debian 13). Host libc: $(ldd --version 2>/dev/null | head -1). Rebuild with manylinux/older glibc or upgrade the OS — Ubuntu 22.04 is NOT supported by this binary."
+fi
+
 if [[ -f /etc/os-release ]]; then
   # shellcheck disable=SC1091
   . /etc/os-release
@@ -42,8 +57,11 @@ if [[ -f /etc/os-release ]]; then
     die "unsupported OS: ${PRETTY_NAME:-$OS_ID} (this installer targets Ubuntu/Debian)"
   fi
   case "$OS_VER" in
-    22.04|24.04|12|13) : ;;
-    *) echo "WARNING: primary targets are Ubuntu 22.04/24.04; you are on ${PRETTY_NAME:-$OS_ID $OS_VER}." >&2 ;;
+    24.04|13) : ;;
+    22.04|12)
+      echo "WARNING: OS ${PRETTY_NAME:-$OS_ID $OS_VER} is below the glibc 2.39 floor of this binary. Install will abort at the libc check." >&2
+      ;;
+    *) echo "WARNING: primary target is Ubuntu 24.04 / Debian 13 x86_64; you are on ${PRETTY_NAME:-$OS_ID $OS_VER}." >&2 ;;
   esac
 else
   die "cannot detect OS (/etc/os-release missing)"

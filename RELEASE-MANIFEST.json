@@ -20,7 +20,7 @@
     },
     {
       "path": "web/index.html",
-      "sha256": "7088b78c97e8bbcc92e9599f182fb1def16fe4ba580a8b2b5a47a3c8ac3bb4d8"
+      "sha256": "49b63ec39b860b9cff71a90dd6342bc18b37692122fb8be12badcadf19f000bc"
     },
     {
       "path": "config/config.example.toml",
@@ -36,11 +36,11 @@
     },
     {
       "path": "scripts/install.sh",
-      "sha256": "79c515a85fe57a9e4e6e5b0cf415c3b2261b8fae74309ccc2c26378e0b92cbd2"
+      "sha256": "08ad4cac2e3a6021c33d65f795cfffed5e67e5343edf4dde0b46b3f9ba9f2250"
     },
     {
       "path": "scripts/upgrade.sh",
-      "sha256": "d4f41fb276c59ad18b8d4a7bd391399bb0e53c64cb357a9be8ba0793652fa018"
+      "sha256": "6169b907b5c2555609df10f2958ff2e6c064dc1ab670cc147357128318dbb0ea"
     },
     {
       "path": "scripts/uninstall.sh",
@@ -56,7 +56,7 @@
     },
     {
       "path": "README.md",
-      "sha256": "5d6262dfbb7409ba17161f1ab6af6283f486541aaedce622d96e7bffe7f3fc24"
+      "sha256": "7f38e8140c0842a292e7f176ce7a9f83b6d0c7b4ef35c8b15e5788d1bde970c2"
     },
     {
       "path": "docs/ARCHITECTURE.md",
@@ -76,7 +76,7 @@
     },
     {
       "path": "docs/INSTALL.md",
-      "sha256": "c4891b5b61e6ef9277489430c1965bbecd4c554537411a91b5ea2421b315ea7d"
+      "sha256": "2909bb3f060917ffd3fdac09f32681c5df6d5c6811ab7d3898553acb885945bb"
     },
     {
       "path": "docs/OPERATIONS.md",
@@ -100,7 +100,7 @@
     },
     {
       "path": "docs/TROUBLESHOOTING.md",
-      "sha256": "ff46da38f7f9e94b0510a3bb3a7f4dcb8f9162ed5f5bcc26590bdbaaf3b08667"
+      "sha256": "9e117e40bf2cd6355c6a49f7ab982fa091463f6c76ddf215c6299e4bd64848d9"
     },
     {
       "path": "docs/VERIFICATION-v1.0.2.md",

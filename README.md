@@ -7,10 +7,10 @@ scheduler and motion pre-filtering, keeps metadata in SQLite (WAL), and
 serves a REST API, WebSocket push and a web dashboard — all in **one
 executable, one service, one config**.
 
-- Targets **Ubuntu 22.04 / 24.04 x86_64**. (Release verified on a Debian
-  13 sandbox with identical tooling — see
-  `docs/VERIFICATION-v1.0.2.md`; Ubuntu fresh-install runs are marked
-  NOT TESTED for this sandbox.)
+- Targets **Ubuntu 24.04 / Debian 13 x86_64 (GLIBC 2.39+)**. The shipped
+  `bin/cctv-server` **does not run on Ubuntu 22.04 or Debian 12**
+  (`GLIBC_2.39 not found`). Verified build host was glibc 2.39+; see
+  `docs/VERIFICATION-v1.0.2.md`.
 - Production packaging: hardened systemd unit, dedicated `cctv` user,
   `/opt/cctv-server/` + `/etc/cctv-server/` + `/var/lib/cctv-server/`
   layout, idempotent installer / transactional upgrader with automatic
@@ -30,7 +30,7 @@ executable, one service, one config**.
   ~1% CPU / ~14 MB RSS. See `docs/PERFORMANCE.md` — the old "10
   FPS/camera AI" target is **not** achievable on CPU-only.
 
-## Quick start (Ubuntu 22.04 / 24.04 x86_64)
+## Quick start (Ubuntu 24.04 / Debian 13 x86_64)
 
 ```bash
 sudo apt update && sudo apt install -y ffmpeg unzip
@@ -72,7 +72,6 @@ systemd/cctv-server.service
 scripts/install.sh         idempotent installer (sudo)
 scripts/upgrade.sh         transactional upgrader with rollback (sudo)
 scripts/uninstall.sh       uninstaller (--purge supported)
-scripts/build-release.sh   release builder (ZIP + SHA256SUMS + manifest)
 models/README.md
 VERSION  LICENSE  README.md  RELEASE-MANIFEST.json  SHA256SUMS
 docs/                      shipped documentation

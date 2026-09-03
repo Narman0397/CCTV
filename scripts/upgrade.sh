@@ -119,6 +119,10 @@ NEW_VER="$("$NEW_BIN" --version 2>/dev/null | awk '{print $2}')"
 CUR_VER="$("$BIN" --version 2>/dev/null | awk '{print $2}')"
 ARCH="$(uname -m)"
 [[ "$ARCH" == "x86_64" ]] || { echo "ERROR: unsupported architecture $ARCH" >&2; rm -rf "$TMP"; exit 1; }
+if ! "$NEW_BIN" --version >/dev/null 2>&1; then
+  echo "ERROR: new binary cannot execute on this host (typically GLIBC_2.39 missing — need Ubuntu 24.04 / Debian 13)." >&2
+  rm -rf "$TMP"; exit 1
+fi
 if [[ -n "$CUR_VER" && -n "$NEW_VER" ]] && version_gt "$CUR_VER" "$NEW_VER"; then
   echo "ERROR: downgrade $CUR_VER → $NEW_VER is refused (schema may have moved forward)." >&2
   echo "       Restore from /var/backups/cctv-server-*/ and the old release ZIP instead." >&2
