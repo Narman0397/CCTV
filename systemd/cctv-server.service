@@ -12,6 +12,7 @@ User=cctv
 Group=cctv
 # Optional secrets file (mode 0600 root:root). Leading '-' means missing file is not fatal.
 EnvironmentFile=-/etc/cctv-server/secrets.env
+Environment=PATH=/opt/cctv-server/bin:/usr/local/bin:/usr/bin:/bin
 ExecStart=/opt/cctv-server/bin/cctv-server serve --config /etc/cctv-server/config.toml
 Restart=on-failure
 RestartSec=5

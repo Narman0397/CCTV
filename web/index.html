@@ -728,14 +728,9 @@ $("#pw-btn").onclick = async () => {
   if (!nw) return;
   if (nw.length < 8){ toast("Password too short", "err"); return; }
   try {
-    await api("/api/auth/password", {method:"POST", body: JSON.stringify({password: cur, new_password: nw})});
+    await api("/api/auth/password", {method:"POST", body: JSON.stringify({current_password: cur, new_password: nw})});
     toast("Password updated. Other sessions were signed out.", "ok");
-  } catch(e){
-    try {
-      await api("/api/auth/password", {method:"POST", body: JSON.stringify({username:"admin", password: cur, new_password: nw})});
-      toast("Password updated. Other sessions were signed out.", "ok");
-    } catch(e2){ toast("Password: "+e2.message, "err"); }
-  }
+  } catch(e){ toast("Password: "+e.message, "err"); }
 };
 
 (async function boot(){

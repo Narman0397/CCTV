@@ -16,11 +16,11 @@
   "files": [
     {
       "path": "bin/cctv-server",
-      "sha256": "83bce8b3013ee2015a75f5e930d8d7337165bf54ddc6f614f2afd6c039f6c298"
+      "sha256": "976425b37539efa0ad46e051768ca200cc519c5314e0f9e379580abe42e95b43"
     },
     {
       "path": "web/index.html",
-      "sha256": "49b63ec39b860b9cff71a90dd6342bc18b37692122fb8be12badcadf19f000bc"
+      "sha256": "a00b4b7705f1b51b6688c545a3f31aebf764f560416a5ee03ed9093bc9ba6d10"
     },
     {
       "path": "config/config.example.toml",
@@ -31,12 +31,16 @@
       "sha256": "448acf8234b327caa485b8c93d5a3e7c4dab013d93ee7b623f8b6a38662249e9"
     },
     {
+      "path": "models/yolov8n.onnx",
+      "sha256": "f34d80eefdc797c7e5126bcd0560fe1bee105dc3a6a7b76e988fc053cbf15a4b"
+    },
+    {
       "path": "systemd/cctv-server.service",
-      "sha256": "ecf8860bb9515674ee0861793c455a2cbc4b99316052ed12b5cfbcb9d1024143"
+      "sha256": "1edf090cd7b1c12ba10c8f15fd469a4b97dba289d6d1e22c01a485b84e46d76a"
     },
     {
       "path": "scripts/install.sh",
-      "sha256": "08ad4cac2e3a6021c33d65f795cfffed5e67e5343edf4dde0b46b3f9ba9f2250"
+      "sha256": "6ba9982b2accbacad42229496191b89c8b84c7162b6cb719ca8645814452cebf"
     },
     {
       "path": "scripts/upgrade.sh",
@@ -45,6 +49,10 @@
     {
       "path": "scripts/uninstall.sh",
       "sha256": "aab44f86e4a872f2ea332752af4384eb59dd167f68b93ea593c9f56df061d7d4"
+    },
+    {
+      "path": "scripts/patch-glibc-compat.py",
+      "sha256": "3480dc53ec4e46423bbe2c1dd7133171913783069d4ba9a801bce7e25b96be95"
     },
     {
       "path": "VERSION",
@@ -56,7 +64,7 @@
     },
     {
       "path": "README.md",
-      "sha256": "7f38e8140c0842a292e7f176ce7a9f83b6d0c7b4ef35c8b15e5788d1bde970c2"
+      "sha256": "3e5b245dddac96885e4bf044b0c196fc3c1eae1cda48adbba5dca724e0ccd4a8"
     },
     {
       "path": "docs/ARCHITECTURE.md",

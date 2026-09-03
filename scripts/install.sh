@@ -33,19 +33,10 @@ trap 'echo "ERROR: install failed at line $LINENO — re-run the installer to co
 ARCH="$(uname -m)"
 [[ "$ARCH" == "x86_64" ]] || die "unsupported architecture: $ARCH (this release targets x86_64)"
 
-# This release binary is dynamically linked against GLIBC 2.39 (Ubuntu 24.04 /
-# Debian 13). Ubuntu 22.04 (GLIBC 2.35) and Debian 12 (2.36) cannot run it.
-glibc_ok() {
-  local ver
-  ver="$(ldd --version 2>/dev/null | awk 'NR==1{print $NF}')"
-  [[ -n "$ver" ]] || return 1
-  awk -v v="$ver" 'BEGIN{
-    n=split(v,a,"."); maj=a[1]+0; min=a[2]+0;
-    exit !((maj>2) || (maj==2 && min>=39))
-  }'
-}
-if ! glibc_ok; then
-  die "this binary requires GLIBC 2.39+ (Ubuntu 24.04 or Debian 13). Host libc: $(ldd --version 2>/dev/null | head -1). Rebuild with manylinux/older glibc or upgrade the OS — Ubuntu 22.04 is NOT supported by this binary."
+# v1.0.2 was linked with a GLIBC_2.39 verneed for two weak pidfd_* symbols.
+# scripts/patch-glibc-compat.py drops that verneed so Ubuntu 22.04 / Debian 12 run.
+if [[ -f "$RELEASE_DIR/scripts/patch-glibc-compat.py" ]]; then
+  python3 "$RELEASE_DIR/scripts/patch-glibc-compat.py" "$RELEASE_DIR/bin/cctv-server" || true
 fi
 
 if [[ -f /etc/os-release ]]; then
@@ -114,7 +105,18 @@ fi
 [[ -n "$UNIT_SRC" ]] || die "systemd unit not found"
 say "release layout: $(dirname "$BIN_SRC")"
 
-command -v ffmpeg >/dev/null 2>&1 || die "ffmpeg is required (sudo apt install ffmpeg)"
+if ! command -v ffmpeg >/dev/null 2>&1 && [[ ! -x "$RELEASE_DIR/bin/ffmpeg" ]]; then
+  say "ffmpeg not on PATH — downloading a static build (npm @ffmpeg-installer/linux-x64)"
+  FF_TMP="$(mktemp -d)"
+  if curl -fsSL "https://registry.npmjs.org/@ffmpeg-installer/linux-x64/-/linux-x64-4.1.0.tgz" -o "$FF_TMP/ff.tgz"; then
+    tar -xzf "$FF_TMP/ff.tgz" -C "$FF_TMP"
+    if [[ -f "$FF_TMP/package/ffmpeg" ]]; then
+      install -m 0755 "$FF_TMP/package/ffmpeg" "$RELEASE_DIR/bin/ffmpeg"
+    fi
+  fi
+  rm -rf "$FF_TMP"
+  [[ -x "$RELEASE_DIR/bin/ffmpeg" ]] || die "ffmpeg is required (sudo apt install ffmpeg)"
+fi
 command -v curl >/dev/null 2>&1 || echo "WARNING: curl not found (needed for readiness check and remote model install)" >&2
 
 if ! getent group cctv >/dev/null 2>&1; then
@@ -138,6 +140,17 @@ run install -d -m 0750 -o cctv -g cctv /var/log/cctv-server
 
 say "installing binary"
 run install -m 0755 -o root -g cctv "$BIN_SRC" /opt/cctv-server/bin/cctv-server
+if [[ -x "$RELEASE_DIR/scripts/patch-glibc-compat.py" ]]; then
+  run python3 "$RELEASE_DIR/scripts/patch-glibc-compat.py" /opt/cctv-server/bin/cctv-server || true
+fi
+if [[ -x "$RELEASE_DIR/bin/ffmpeg" ]]; then
+  say "installing bundled ffmpeg"
+  run install -m 0755 -o root -g cctv "$RELEASE_DIR/bin/ffmpeg" /opt/cctv-server/bin/ffmpeg
+fi
+if [[ -f "$RELEASE_DIR/models/yolov8n.onnx" ]]; then
+  say "installing YOLO model"
+  run install -m 0644 -o root -g cctv "$RELEASE_DIR/models/yolov8n.onnx" /opt/cctv-server/models/yolov8n.onnx
+fi
 say "installing web dashboard"
 run install -m 0644 -o root -g cctv "$WEB_SRC" /opt/cctv-server/web/index.html
 if [[ -n "$DOCS_SRC" && -d "$DOCS_SRC" ]]; then
