@@ -15,6 +15,7 @@ Common causes and fixes:
 | `cannot read secrets file ... Permission denied` | `secrets.env` must be `0600 root:root` and injected via `EnvironmentFile=` (unit does this). If you run `cctv-server init` as `cctv` directly it cannot read the file — run init as root. |
 | `Address already in use` | Another process on the configured port: `ss -tlnp \| grep :8080`. |
 | `ffmpeg not found` | `sudo apt install -y ffmpeg`. |
+| `GLIBC_2.39 not found` / installer libc check | Binary was linked on Ubuntu 24.04 / Debian 13. **Ubuntu 22.04 and Debian 12 are not supported** by this artifact. Upgrade the OS or rebuild against an older glibc (source not in this package). |
 | Exits immediately with a config error | Run `cctv-server health --config /etc/cctv-server/config.toml` to see the validation error. |
 | Unit shows `StartLimitIntervalSec` warnings | Old unit on disk — reinstall: `sudo ./scripts/install.sh` (or copy `systemd/cctv-server.service`). |
 

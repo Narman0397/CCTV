@@ -3,7 +3,7 @@
   "name": "cctv-ai-server",
   "version": "1.0.2",
   "build_timestamp": "2026-09-02T06:56:50Z",
-  "git_commit": "unknown",
+  "git_commit": "arena/01a06546-cctv",
   "target_os": "linux",
   "target_arch": "x86_64",
   "target_triple": "x86_64-unknown-linux-gnu",
@@ -16,35 +16,43 @@
   "files": [
     {
       "path": "bin/cctv-server",
-      "sha256": "83bce8b3013ee2015a75f5e930d8d7337165bf54ddc6f614f2afd6c039f6c298"
+      "sha256": "976425b37539efa0ad46e051768ca200cc519c5314e0f9e379580abe42e95b43"
     },
     {
       "path": "web/index.html",
-      "sha256": "c2116dae3341bf1a9b98cb0d729b6a49b3513c8fe11c9ad1c1500f2b39d92476"
+      "sha256": "3af4cf90fba186c5b53c78f8d161a0a6925946ae212365df497947bf8e0ce46d"
     },
     {
       "path": "config/config.example.toml",
-      "sha256": "c2caa1857711b778e0dd183e1bb5276ff292d88149d2af0d8cb52806ec2e56e2"
+      "sha256": "f62931647ad5761a1406cec18c47cd1969c0630d5f8504a917bbb0fd55a1a356"
     },
     {
       "path": "models/README.md",
       "sha256": "448acf8234b327caa485b8c93d5a3e7c4dab013d93ee7b623f8b6a38662249e9"
     },
     {
+      "path": "models/yolov8n.onnx",
+      "sha256": "f34d80eefdc797c7e5126bcd0560fe1bee105dc3a6a7b76e988fc053cbf15a4b"
+    },
+    {
       "path": "systemd/cctv-server.service",
-      "sha256": "4acb860531ef5fd2630d00e5c99ef0ab4d21a840fe5cf9a77136ec82f745d5da"
+      "sha256": "1edf090cd7b1c12ba10c8f15fd469a4b97dba289d6d1e22c01a485b84e46d76a"
     },
     {
       "path": "scripts/install.sh",
-      "sha256": "2a2ebdc9b4907a634b62a9faaa0f669927bd3882d35a5762520fef71fb4f279e"
+      "sha256": "aa02a70cb1e014c54e802ac082545b01cba986e2843119c58679a3b0b5e7b783"
     },
     {
       "path": "scripts/upgrade.sh",
-      "sha256": "1df7f9ca81f5c97472daf0f614350ff6d81aae25b09eacb50e838251210e36d5"
+      "sha256": "6169b907b5c2555609df10f2958ff2e6c064dc1ab670cc147357128318dbb0ea"
     },
     {
       "path": "scripts/uninstall.sh",
-      "sha256": "ee30e4a6f55f37eb9246f3104f148d9f64260e72d794f5916c5d29f7f0134f85"
+      "sha256": "aab44f86e4a872f2ea332752af4384eb59dd167f68b93ea593c9f56df061d7d4"
+    },
+    {
+      "path": "scripts/patch-glibc-compat.py",
+      "sha256": "3480dc53ec4e46423bbe2c1dd7133171913783069d4ba9a801bce7e25b96be95"
     },
     {
       "path": "VERSION",
@@ -56,7 +64,7 @@
     },
     {
       "path": "README.md",
-      "sha256": "5d6262dfbb7409ba17161f1ab6af6283f486541aaedce622d96e7bffe7f3fc24"
+      "sha256": "4da84f36d2e300251f291366c0c6831328d8e99478e54275be6dc54d206b542e"
     },
     {
       "path": "docs/ARCHITECTURE.md",
@@ -72,11 +80,11 @@
     },
     {
       "path": "docs/CONFIGURATION.md",
-      "sha256": "f9862bcf7dbcdbba605c4a3ce653ee6ba54b80056c651ad87c66c1946f3be9b1"
+      "sha256": "ab1e007e7b7de73b4d0ff3a95f5cf11dcb84b073c718eb12d0b1dd84e30b821e"
     },
     {
       "path": "docs/INSTALL.md",
-      "sha256": "c4891b5b61e6ef9277489430c1965bbecd4c554537411a91b5ea2421b315ea7d"
+      "sha256": "2909bb3f060917ffd3fdac09f32681c5df6d5c6811ab7d3898553acb885945bb"
     },
     {
       "path": "docs/OPERATIONS.md",
@@ -84,7 +92,7 @@
     },
     {
       "path": "docs/PERFORMANCE.md",
-      "sha256": "e1917a0607366f1df0c7cec6ccdd331455c61845d0c4d50c1bb0705fc9e95a69"
+      "sha256": "ca0cb27bedf22db6d7f3f5e4f18450e23e4e47f65647135f41dffa4367fdfb5b"
     },
     {
       "path": "docs/RELEASE-REPORT-v1.0.2.md",
@@ -100,11 +108,15 @@
     },
     {
       "path": "docs/TROUBLESHOOTING.md",
-      "sha256": "ff46da38f7f9e94b0510a3bb3a7f4dcb8f9162ed5f5bcc26590bdbaaf3b08667"
+      "sha256": "9e117e40bf2cd6355c6a49f7ab982fa091463f6c76ddf215c6299e4bd64848d9"
     },
     {
       "path": "docs/VERIFICATION-v1.0.2.md",
       "sha256": "f2f75debb0ef60a8cb1f267510b6605160b4e0fe1e3ae353d6937dafa19feac6"
+    },
+    {
+      "path": "config/profile-i5-8gb.toml",
+      "sha256": "bfb35ec3bb47a992e6f8ae2aa11d38bc22b94a25eaba528d08cfd05d66cf9372"
     }
   ],
   "cargo_lock_sha256": "af030b7b4da6570a7dac9df4a8289d30ee6bbf81111bd33838c494d82896e8fe"

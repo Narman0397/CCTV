@@ -1,15 +1,15 @@
 # Installation — v1.0.2
 
 cctv-server is packaged as a single self-contained ZIP targeting
-**Ubuntu 22.04 / 24.04 x86_64** (Debian accepted with a warning). The
-installer is idempotent and **fails (non-zero) if the service does not
-become ready**.
+**Ubuntu 24.04 / Debian 13 x86_64 (GLIBC 2.39+)**. Ubuntu 22.04 and
+Debian 12 cannot execute the shipped binary. The installer is idempotent
+and **fails (non-zero) if the service does not become ready**.
 
 ## Requirements
 
 | Requirement | Minimum | Notes |
 |---|---|---|
-| OS | Ubuntu 22.04 or 24.04 x86_64 | `uname -m` = `x86_64`, checked |
+| OS | Ubuntu 24.04 or Debian 13 x86_64 | GLIBC **2.39+** required (`ldd --version`). Ubuntu 22.04 / Debian 12 will fail the installer libc check. |
 | ffmpeg | 4.4+ | `sudo apt install -y ffmpeg` (required) |
 | curl | any | only for `model install` |
 | RAM | 1 GB (2–4 GB recommended) | see `docs/PERFORMANCE.md` |

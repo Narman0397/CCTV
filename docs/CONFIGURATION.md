@@ -53,8 +53,22 @@ acceleration = "auto"              # auto | none | vaapi | qsv
 model_dir = "/opt/cctv-server/models"
 model_file = "yolov8n.onnx"
 default_max_fps = 2.0   # per-camera AI budget on CPU
+idle_fps = 0.4
+motion_fps = 1.5
+active_fps = 2.0        # 5.0 saturates Core i5; see profile-i5-8gb.toml
+input_size = 640        # 320 = more cameras, weaker small-object recall
 ...
 ```
+
+### Hardware profile (Core i5 + 8 GB)
+
+`config/profile-i5-8gb.toml` is the drop-in overlay (also copied to
+`/opt/cctv-server/config/` by the installer). Fresh installs already
+use these defaults. Existing installs: merge the `[ai]` /
+`[cameras.defaults]` blocks, then `systemctl restart cctv-server`.
+
+Capacity: 4 cameras with AI; 6 if `input_size = 320`; 8–10 with AI
+only on priority cameras. Prefer RTSP **substream** for analyzer/AI.
 
 > Removed in v1.0.2: `jwt_secret`/`JWT_SECRET` (never used — sessions are
 > opaque server-side tokens) and `hardware.iqpu_vendor_ids` (dead config,

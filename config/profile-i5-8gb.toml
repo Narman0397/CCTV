@@ -1,0 +1,64 @@
+# =====================================================================
+# Hardware profile: Intel Core i5 + 8 GB RAM, CPU AI (YOLOv8n)
+# Copy the [cameras.defaults] / [ai] / [hardware] / [motion] blocks into
+# /etc/cctv-server/config.toml (or start from config.example.toml which
+# already uses these values) then: systemctl restart cctv-server
+#
+# Capacity (honest, CPU-only):
+#   4 cameras  — AI on all, ~1.5–2 FPS, 720p record copy
+#   6 cameras  — AI 1 FPS or input_size=320
+#   8–10       — AI on 2–4 priority cameras only
+# Use camera substream for analyzer/AI; keep main stream for recording
+# via the camera's own high-res URL if you split (API per camera).
+# =====================================================================
+
+[cameras.defaults]
+default_fps = 15
+default_preview_fps = 5
+
+[recording]
+segment_seconds = 300
+enabled_by_default = true
+hardware_encode = false
+
+[ai]
+enabled_by_default = true
+model_file = "yolov8n.onnx"
+default_max_fps = 2.0
+idle_fps = 0.4
+motion_fps = 1.5
+active_fps = 2.0
+input_size = 640
+conf_threshold = 0.35
+iou_threshold = 0.45
+max_inference_latency_ms = 250
+cpu_high_load_percent = 70
+cpu_critical_load_percent = 85
+ram_high_pressure_percent = 80
+queue_capacity = 2
+engine = "onnx"
+
+[motion]
+enabled_by_default = true
+frame_width = 160
+frame_height = 90
+threshold = 12
+sensitivity = 1.0
+debounce_seconds = 2
+
+[hardware]
+acceleration = "auto"
+enable_vaapi = true
+enable_qsv = true
+
+# Optional extra cameras: disable AI
+# [[cameras.cameras]]
+# name = "Yard"
+# rtsp_url = "rtsp://user:pass@192.168.1.51:554/stream2"
+# ai_enabled = false
+# motion_enabled = true
+# recording = true
+# fps = 15
+# preview_fps = 4
+# width = 1280
+# height = 720

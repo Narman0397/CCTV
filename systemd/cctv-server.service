@@ -1,6 +1,6 @@
 [Unit]
 Description=cctv-server — AI video surveillance (RTSP ingest, NVR, YOLO detection, dashboard)
-Documentation=file:///opt/cctv-server/docs/README.md https://github.com/cctv-server/cctv-server
+Documentation=file:///opt/cctv-server/docs/README.md https://github.com/Narman0397/CCTV
 After=network-online.target
 Wants=network-online.target
 StartLimitBurst=5
@@ -10,10 +10,9 @@ StartLimitIntervalSec=60
 Type=simple
 User=cctv
 Group=cctv
-# secrets.env stays mode 0600 root:root; systemd reads it as root and
-# passes any KEY=VALUE entries to the service environment. No secret is
-# required at runtime (sessions are opaque server-side tokens).
-EnvironmentFile=/etc/cctv-server/secrets.env
+# Optional secrets file (mode 0600 root:root). Leading '-' means missing file is not fatal.
+EnvironmentFile=-/etc/cctv-server/secrets.env
+Environment=PATH=/opt/cctv-server/bin:/usr/local/bin:/usr/bin:/bin
 ExecStart=/opt/cctv-server/bin/cctv-server serve --config /etc/cctv-server/config.toml
 Restart=on-failure
 RestartSec=5
@@ -29,21 +28,19 @@ ProtectKernelTunables=true
 ProtectKernelModules=true
 ProtectControlGroups=true
 ProtectClock=true
+ProtectHostname=true
 RestrictSUIDSGID=true
 LockPersonality=true
 RestrictNamespaces=true
+RestrictRealtime=true
 SystemCallArchitectures=native
 MemoryDenyWriteExecute=false
 CapabilityBoundingSet=
 AmbientCapabilities=
-# Service only needs Internet + local sockets (RTSP clients, HTTP/WS API,
-# ffmpeg child pipes). Block raw packet / netlink / exotic families.
 RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
 
-# --- writable paths only (least privilege) ---
 ReadWritePaths=/var/lib/cctv-server /var/log/cctv-server
 
-# --- resource limits for the 4 GB reference box ---
 LimitNOFILE=65536
 LimitNPROC=1024
 TasksMax=512

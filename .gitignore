@@ -1,0 +1,8 @@
+*.bak
+*.tmp
+.bootstrap-admin-password
+secrets.env
+config.toml
+/var/
+__pycache__/
+/lib/
