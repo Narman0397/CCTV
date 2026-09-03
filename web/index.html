@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; media-src 'self' blob:; connect-src 'self' ws: wss:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'">
 <title>cctv-server — Video Surveillance Console</title>
 <style>
 :root{
@@ -153,6 +154,7 @@ video{width:100%; max-height:340px; background:#000; border-radius:8px; margin-t
       <span class="pill"><span class="led" id="ws-led"></span><span id="ws-txt">connecting</span></span>
       <span class="pill">up <span id="up-s"></span></span>
       <span class="pill" id="user-pill"></span>
+      <button class="btn small" id="pw-btn">Password</button>
       <button class="btn small" id="logout-btn">Sign out</button>
     </div>
   </header>
@@ -307,7 +309,7 @@ function toast(msg, kind){
 
 async function api(path, opts={}){
   const headers = Object.assign({"Content-Type":"application/json"}, opts.headers||{});
-  const res = await fetch(path, Object.assign({}, opts, {headers}));
+  const res = await fetch(path, Object.assign({credentials:"same-origin"}, opts, {headers}));
   if (res.status === 401){
     const t = await res.json().catch(()=>({}));
     if (String(t.error).includes("authentic") || String(t.error).includes("expired")){
@@ -330,7 +332,7 @@ async function login(u, p){
   await enterApp();
 }
 function logout(silent){
-  try { fetch("/api/auth/logout", {method:"POST"}); } catch(_){}
+  try { fetch("/api/auth/logout", {method:"POST", credentials:"same-origin"}); } catch(_){}
   $("#app").classList.add("hidden");
   $("#login").classList.remove("hidden");
   if (!silent) toast("Signed out");
@@ -375,7 +377,9 @@ function connectWS(){
 }
 function scheduleWS(){
   clearTimeout(wsTimer);
-  wsTimer = setTimeout(()=>{ if (!$("#login").classList.contains("hidden")) connectWS(); }, 5000);
+  wsTimer = setTimeout(()=>{
+    if ($("#login").classList.contains("hidden")) connectWS();
+  }, 5000);
 }
 
 /* ================= tabs ================= */
@@ -395,11 +399,17 @@ function tickUptime(){ setInterval(()=>{ if (up0) $("#up-s").textContent = fmtDu
 
 /* ================= cameras / live ================= */
 let cams = [];
+const camTimers = [];
+
+function clearCamTimers(){
+  while (camTimers.length) clearInterval(camTimers.pop());
+}
 
 async function refreshCameras(){
   try {
     cams = await api("/api/cameras");
     renderCameras();
+    fillCamSelect();
   } catch(e){ toast("Camera list: " + e.message, "err"); }
 }
 
@@ -413,6 +423,7 @@ function camStatus(c){
 
 function renderCameras(){
   const g = $("#cam-grid");
+  clearCamTimers();
   if (!cams.length){ g.innerHTML = '<div class="empty">No cameras configured. Click “Add camera”.</div>'; return; }
   g.innerHTML = "";
   cams.forEach(c => {
@@ -454,7 +465,7 @@ function renderCameras(){
         }
       };
       tick();
-      card._t = setInterval(tick, 1100);
+      camTimers.push(setInterval(tick, 1100));
     } else {
       img.replaceWith(Object.assign(document.createElement("div"), {className:"off", textContent:"camera paused"}));
     }
@@ -571,7 +582,11 @@ $("#ev-pause-btn").onclick = () => {
 };
 $("#ev-cam").onchange = loadEvents;
 $("#ev-sev").onchange = loadEvents;
-setInterval(() => { if (!eventsPaused && !document.querySelector("#tab-events").classList.contains("hidden") && !$("#login").classList.contains("hidden")) loadEvents(); }, 3000);
+setInterval(() => {
+  if (!eventsPaused
+      && !document.querySelector("#tab-events").classList.contains("hidden")
+      && $("#login").classList.contains("hidden")) loadEvents();
+}, 3000);
 
 /* ================= recordings ================= */
 let recs = [];
@@ -645,8 +660,8 @@ async function loadSystem(){
       kv("Database", fmtBytes(disk.database_bytes||0)) +
       kv("Retention (recordings)", (storage.config&&storage.config.retention_days)+" days") +
       kv("Retention (snapshots)", (storage.config&&storage.config.snapshot_retention_days)+" days") +
-      kv("Recordings dir", esc(storage.config&&storage.config.recordings_dir||"")) +
-      kv("Snapshots dir", esc(storage.config&&storage.config.snapshots_dir||""));
+      kv("Recordings dir", (storage.config&&storage.config.recordings_dir)||"") +
+      kv("Snapshots dir", (storage.config&&storage.config.snapshots_dir)||"");
     const warns = disk.warnings||[];
     $("#storage-warn").textContent = warns.length ? "⚠ " + warns.join(" · ") : "No storage warnings";
 
@@ -657,10 +672,10 @@ async function loadSystem(){
       kv("AI model loaded", h.ai_model_loaded ? "yes" : "no") +
       kv("Cameras", h.cameras) +
       kv("Uptime", fmtDur(h.uptime_seconds||0)) +
-      kv("Version", esc(ver.version||"")+" ("+esc(ver.app||"")+")") +
-      kv("FFmpeg", esc((ver.ffmpeg||"").split(" ").slice(0,3).join(" "))) +
-      kv("Acceleration", esc(ver.acceleration||"—")) +
-      kv("AI model", esc(ver.model||"—"));
+      kv("Version", (ver.version||"")+" ("+(ver.app||"")+")") +
+      kv("FFmpeg", (ver.ffmpeg||"").split(" ").slice(0,3).join(" ")) +
+      kv("Acceleration", ver.acceleration||"—") +
+      kv("AI model", ver.model||"—");
 
     const ai = mets;
     $("#ai-kv").innerHTML =
@@ -706,6 +721,22 @@ $("#login-form").onsubmit = async ev => {
   btn.disabled = false; btn.textContent = "Sign in";
 };
 $("#logout-btn").onclick = () => logout(false);
+$("#pw-btn").onclick = async () => {
+  const cur = prompt("Current password");
+  if (cur == null) return;
+  const nw = prompt("New password (min 8 characters)");
+  if (!nw) return;
+  if (nw.length < 8){ toast("Password too short", "err"); return; }
+  try {
+    await api("/api/auth/password", {method:"POST", body: JSON.stringify({password: cur, new_password: nw})});
+    toast("Password updated. Other sessions were signed out.", "ok");
+  } catch(e){
+    try {
+      await api("/api/auth/password", {method:"POST", body: JSON.stringify({username:"admin", password: cur, new_password: nw})});
+      toast("Password updated. Other sessions were signed out.", "ok");
+    } catch(e2){ toast("Password: "+e2.message, "err"); }
+  }
+};
 
 (async function boot(){
   // If a session cookie exists, enter the app; otherwise show login.

@@ -16,8 +16,8 @@
 # =====================================================================
 
 [server]
-# Bind address. Keep 127.0.0.1 when the dashboard is used on the same
-# machine; use 0.0.0.0 only behind a trusted firewall.
+# Bind address. Prefer 127.0.0.1 + a TLS reverse proxy for any untrusted
+# network. 0.0.0.0 is for a trusted LAN firewall only.
 host = "0.0.0.0"
 port = 8080
 name = "cctv-server"

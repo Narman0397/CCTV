@@ -3,7 +3,7 @@
   "name": "cctv-ai-server",
   "version": "1.0.2",
   "build_timestamp": "2026-09-02T06:56:50Z",
-  "git_commit": "unknown",
+  "git_commit": "arena/01a06546-cctv",
   "target_os": "linux",
   "target_arch": "x86_64",
   "target_triple": "x86_64-unknown-linux-gnu",
@@ -20,11 +20,11 @@
     },
     {
       "path": "web/index.html",
-      "sha256": "c2116dae3341bf1a9b98cb0d729b6a49b3513c8fe11c9ad1c1500f2b39d92476"
+      "sha256": "7088b78c97e8bbcc92e9599f182fb1def16fe4ba580a8b2b5a47a3c8ac3bb4d8"
     },
     {
       "path": "config/config.example.toml",
-      "sha256": "c2caa1857711b778e0dd183e1bb5276ff292d88149d2af0d8cb52806ec2e56e2"
+      "sha256": "e24db80dd088db14994c0b726145a4c1924f387631d094b3f11a42029de81d48"
     },
     {
       "path": "models/README.md",
@@ -32,19 +32,19 @@
     },
     {
       "path": "systemd/cctv-server.service",
-      "sha256": "4acb860531ef5fd2630d00e5c99ef0ab4d21a840fe5cf9a77136ec82f745d5da"
+      "sha256": "ecf8860bb9515674ee0861793c455a2cbc4b99316052ed12b5cfbcb9d1024143"
     },
     {
       "path": "scripts/install.sh",
-      "sha256": "2a2ebdc9b4907a634b62a9faaa0f669927bd3882d35a5762520fef71fb4f279e"
+      "sha256": "79c515a85fe57a9e4e6e5b0cf415c3b2261b8fae74309ccc2c26378e0b92cbd2"
     },
     {
       "path": "scripts/upgrade.sh",
-      "sha256": "1df7f9ca81f5c97472daf0f614350ff6d81aae25b09eacb50e838251210e36d5"
+      "sha256": "d4f41fb276c59ad18b8d4a7bd391399bb0e53c64cb357a9be8ba0793652fa018"
     },
     {
       "path": "scripts/uninstall.sh",
-      "sha256": "ee30e4a6f55f37eb9246f3104f148d9f64260e72d794f5916c5d29f7f0134f85"
+      "sha256": "aab44f86e4a872f2ea332752af4384eb59dd167f68b93ea593c9f56df061d7d4"
     },
     {
       "path": "VERSION",
