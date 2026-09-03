@@ -184,6 +184,13 @@ if [[ -f /etc/cctv-server/config.toml ]]; then
 else
   run install -m 0640 -o root -g cctv "$CFG_SRC" /etc/cctv-server/config.toml
 fi
+run install -d -m 0755 -o root -g cctv /opt/cctv-server/config
+if [[ -f "$RELEASE_DIR/config/config.example.toml" ]]; then
+  run install -m 0644 -o root -g cctv "$RELEASE_DIR/config/config.example.toml" /opt/cctv-server/config/config.example.toml
+fi
+if [[ -f "$RELEASE_DIR/config/profile-i5-8gb.toml" ]]; then
+  run install -m 0644 -o root -g cctv "$RELEASE_DIR/config/profile-i5-8gb.toml" /opt/cctv-server/config/profile-i5-8gb.toml
+fi
 
 say "preparing secrets file"
 SECRETS=/etc/cctv-server/secrets.env

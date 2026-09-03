@@ -43,6 +43,30 @@ ONNX Runtime YOLOv8n session). They are guidance, not vendor claims.
   `/api/storage`.
 - **RAM**: 1 GB minimum; 2–4 GB recommended for AI + 4–8 cameras.
 
+## Profile: Intel Core i5 + 8 GB RAM (CPU-only)
+
+Shipped defaults (`config/config.example.toml`) and
+`config/profile-i5-8gb.toml` target this box. YOLOv8n @ 640 is ~85 ms
+on a 2-core host (~12 AI FPS aggregate). An i5 (4–6 cores) typically
+sustains **~18–28 aggregate AI FPS**, not 25 FPS per camera.
+
+| Goal | Cameras | AI |
+|---|---|---|
+| Maximum useful detection | **4** | all on, 1.5–2 FPS, 720p record |
+| Aggressive | **6** | 1 FPS or `input_size = 320` |
+| Coverage | **8–10** | AI on 2–4 priority cameras only |
+
+Practices that actually raise effectiveness on this SKU:
+
+1. Point the analyzer at a **substream** (640×360 / 720p@15), keep
+   high-res only for recording if the camera exposes two URLs.
+2. Keep `preview_fps` at 3–5; `active_fps` at 2 (not 5).
+3. Leave `[hardware] acceleration = "auto"` (QSV/VAAPI) when Intel
+   iGPU drivers are installed — this is the real multiplier, not a
+   Rust rewrite.
+4. Watch `/api/system` (CPU &lt; 75%, RAM &lt; 80%) and
+   `frames_dropped` on `/api/metrics`.
+
 ## Benchmark CLI
 
 ```bash

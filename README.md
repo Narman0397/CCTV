@@ -27,8 +27,10 @@ executable, one service, one config**.
   vectors (no shell); every queue is bounded.
 - Measured performance (2-core CPU box, YOLOv8n ONNX): ~83–88
   ms/inference, ~1.7 AI FPS/camera live; 10 cameras without AI → server
-  ~1% CPU / ~14 MB RSS. See `docs/PERFORMANCE.md` — the old "10
-  FPS/camera AI" target is **not** achievable on CPU-only.
+  ~1% CPU / ~14 MB RSS. Defaults are tuned for **Intel Core i5 + 8 GB
+  RAM** (4 AI cameras @ ~2 FPS): `config/profile-i5-8gb.toml`. See
+  `docs/PERFORMANCE.md` — the old "10 FPS/camera AI" target is **not**
+  achievable on CPU-only.
 
 ## Quick start (Ubuntu 24.04 / Debian 13 x86_64)
 
@@ -67,7 +69,8 @@ bootstrap file afterwards. Change the password immediately via
 ```
 bin/cctv-server            release binary
 web/index.html             dashboard
-config/config.example.toml config template
+config/config.example.toml config template (i5/8GB defaults)
+config/profile-i5-8gb.toml Core i5 + 8 GB overlay
 systemd/cctv-server.service
 scripts/install.sh         idempotent installer (sudo)
 scripts/upgrade.sh         transactional upgrader with rollback (sudo)

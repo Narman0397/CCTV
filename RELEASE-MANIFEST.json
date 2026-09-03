@@ -20,11 +20,11 @@
     },
     {
       "path": "web/index.html",
-      "sha256": "a00b4b7705f1b51b6688c545a3f31aebf764f560416a5ee03ed9093bc9ba6d10"
+      "sha256": "3af4cf90fba186c5b53c78f8d161a0a6925946ae212365df497947bf8e0ce46d"
     },
     {
       "path": "config/config.example.toml",
-      "sha256": "e24db80dd088db14994c0b726145a4c1924f387631d094b3f11a42029de81d48"
+      "sha256": "f62931647ad5761a1406cec18c47cd1969c0630d5f8504a917bbb0fd55a1a356"
     },
     {
       "path": "models/README.md",
@@ -40,7 +40,7 @@
     },
     {
       "path": "scripts/install.sh",
-      "sha256": "6ba9982b2accbacad42229496191b89c8b84c7162b6cb719ca8645814452cebf"
+      "sha256": "aa02a70cb1e014c54e802ac082545b01cba986e2843119c58679a3b0b5e7b783"
     },
     {
       "path": "scripts/upgrade.sh",
@@ -64,7 +64,7 @@
     },
     {
       "path": "README.md",
-      "sha256": "3e5b245dddac96885e4bf044b0c196fc3c1eae1cda48adbba5dca724e0ccd4a8"
+      "sha256": "4da84f36d2e300251f291366c0c6831328d8e99478e54275be6dc54d206b542e"
     },
     {
       "path": "docs/ARCHITECTURE.md",
@@ -80,7 +80,7 @@
     },
     {
       "path": "docs/CONFIGURATION.md",
-      "sha256": "f9862bcf7dbcdbba605c4a3ce653ee6ba54b80056c651ad87c66c1946f3be9b1"
+      "sha256": "ab1e007e7b7de73b4d0ff3a95f5cf11dcb84b073c718eb12d0b1dd84e30b821e"
     },
     {
       "path": "docs/INSTALL.md",
@@ -92,7 +92,7 @@
     },
     {
       "path": "docs/PERFORMANCE.md",
-      "sha256": "e1917a0607366f1df0c7cec6ccdd331455c61845d0c4d50c1bb0705fc9e95a69"
+      "sha256": "ca0cb27bedf22db6d7f3f5e4f18450e23e4e47f65647135f41dffa4367fdfb5b"
     },
     {
       "path": "docs/RELEASE-REPORT-v1.0.2.md",
@@ -113,6 +113,10 @@
     {
       "path": "docs/VERIFICATION-v1.0.2.md",
       "sha256": "f2f75debb0ef60a8cb1f267510b6605160b4e0fe1e3ae353d6937dafa19feac6"
+    },
+    {
+      "path": "config/profile-i5-8gb.toml",
+      "sha256": "bfb35ec3bb47a992e6f8ae2aa11d38bc22b94a25eaba528d08cfd05d66cf9372"
     }
   ],
   "cargo_lock_sha256": "af030b7b4da6570a7dac9df4a8289d30ee6bbf81111bd33838c494d82896e8fe"
